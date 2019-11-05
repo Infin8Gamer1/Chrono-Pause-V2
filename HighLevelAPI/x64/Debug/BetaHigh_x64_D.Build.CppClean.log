@@ -2,6 +2,7 @@ c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\lib\betahigh_x64_d.pdb
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\lib\betahigh_x64_d.idb
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\stdafx.obj
+c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\serializable.obj
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\resourcemanager.obj
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\physics.obj
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\parser.obj
@@ -16,27 +17,59 @@ c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\collidertilemap.obj
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\colliderrectangle.obj
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\colliderpoint.obj
+c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\colliderline.obj
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\collidercircle.obj
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\collider.obj
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\animation.obj
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\spacemanager.obj
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\colliderline.obj
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\callbackinputmanager.obj
+c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\animation.obj
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\transform.obj
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\tilemap.obj
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\spritetilemap.obj
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\spritetext.obj
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\spritesource.obj
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\sprite.obj
+c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\spacemanager.obj
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\space.obj
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\soundmanager.obj
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\serializable.obj
+c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\fileopenhelper.obj
 c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\lib\betahigh_x64_d.lib
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\\lib\betahigh_x64_d.pdb
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\\lib\betahigh_x64_d.lib
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\highlevelapi.tlog\cl.command.1.tlog
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\highlevelapi.tlog\cl.read.1.tlog
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\highlevelapi.tlog\cl.write.1.tlog
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\highlevelapi.tlog\lib-link.read.1.tlog
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\highlevelapi.tlog\lib-link.write.1.tlog
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\x64\debug\highlevelapi.tlog\lib.command.1.tlog
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\animation.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\callbackinputmanager.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\collider.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\collidercircle.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\colliderline.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\colliderpoint.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\colliderrectangle.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\collidertilemap.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\component.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\fileopenhelper.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\gameobject.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\gameobjectfactory.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\gameobjectmanager.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\intersection2d.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\level.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\matrix2dstudent.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\meshhelper.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\parser.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\physics.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\resourcemanager.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\serializable.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\soundmanager.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\space.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\spacemanager.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\sprite.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\spritesource.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\spritetext.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\spritetilemap.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\stdafx.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\tilemap.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\transform.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\betahigh_x64_d.pch
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\\lib\betahigh_x64_d.pdb
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\\lib\betahigh_x64_d.lib
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\highlevelapi.tlog\cl.command.1.tlog
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\highlevelapi.tlog\cl.read.1.tlog
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\highlevelapi.tlog\cl.write.1.tlog
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\highlevelapi.tlog\lib-link.read.1.tlog
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\highlevelapi.tlog\lib-link.write.1.tlog
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\x64\debug\highlevelapi.tlog\lib.command.1.tlog

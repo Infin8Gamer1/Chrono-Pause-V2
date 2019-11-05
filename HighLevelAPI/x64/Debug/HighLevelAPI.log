@@ -1,13 +1,13 @@
 ﻿  stdafx.cpp
   CallbackInputManager.cpp
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\src\callbackinputmanager.cpp(13): warning C4100: 'window': unreferenced formal parameter
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\src\callbackinputmanager.cpp(17): warning C4100: 'xoffset': unreferenced formal parameter
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\src\callbackinputmanager.cpp(17): warning C4100: 'window': unreferenced formal parameter
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\src\callbackinputmanager.cpp(21): warning C4100: 'mods': unreferenced formal parameter
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\src\callbackinputmanager.cpp(21): warning C4100: 'window': unreferenced formal parameter
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\src\callbackinputmanager.cpp(31): warning C4100: 'mods': unreferenced formal parameter
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\src\callbackinputmanager.cpp(31): warning C4100: 'scancode': unreferenced formal parameter
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\src\callbackinputmanager.cpp(31): warning C4100: 'window': unreferenced formal parameter
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\src\callbackinputmanager.cpp(13): warning C4100: 'window': unreferenced formal parameter
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\src\callbackinputmanager.cpp(17): warning C4100: 'xoffset': unreferenced formal parameter
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\src\callbackinputmanager.cpp(17): warning C4100: 'window': unreferenced formal parameter
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\src\callbackinputmanager.cpp(21): warning C4100: 'mods': unreferenced formal parameter
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\src\callbackinputmanager.cpp(21): warning C4100: 'window': unreferenced formal parameter
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\src\callbackinputmanager.cpp(31): warning C4100: 'mods': unreferenced formal parameter
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\src\callbackinputmanager.cpp(31): warning C4100: 'scancode': unreferenced formal parameter
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\src\callbackinputmanager.cpp(31): warning C4100: 'window': unreferenced formal parameter
   ColliderLine.cpp
   FileOpenHelper.cpp
   SpaceManager.cpp
@@ -19,16 +19,16 @@ c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine
   ColliderTilemap.cpp
   Component.cpp
   GameObject.cpp
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\src\gameobject.cpp(184): warning C4458: declaration of 'name' hides class member
-  c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\lowlevelapi\include\betaobject.h(129): note: see declaration of 'BetaObject::name'
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\src\gameobject.cpp(184): warning C4458: declaration of 'name' hides class member
+  c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\lowlevelapi\include\betaobject.h(129): note: see declaration of 'BetaObject::name'
   GameObjectFactory.cpp
   GameObjectManager.cpp
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\src\gameobjectmanager.cpp(144): warning C4458: declaration of 'name' hides class member
-  c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\lowlevelapi\include\betaobject.h(129): note: see declaration of 'BetaObject::name'
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\src\gameobjectmanager.cpp(144): warning C4458: declaration of 'name' hides class member
+  c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\lowlevelapi\include\betaobject.h(129): note: see declaration of 'BetaObject::name'
   Intersection2D.cpp
   Level.cpp
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\src\level.cpp(67): warning C4458: declaration of 'name' hides class member
-  c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\lowlevelapi\include\betaobject.h(129): note: see declaration of 'BetaObject::name'
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\src\level.cpp(67): warning C4458: declaration of 'name' hides class member
+  c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\lowlevelapi\include\betaobject.h(129): note: see declaration of 'BetaObject::name'
   Matrix2DStudent.cpp
   MeshHelper.cpp
   Parser.cpp
@@ -40,17 +40,17 @@ c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine
   SoundManager.cpp
   Space.cpp
   Sprite.cpp
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\src\sprite.cpp(60): warning C4458: declaration of 'ssName' hides class member
-  c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\include\sprite.h(144): note: see declaration of 'Sprite::ssName'
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\src\sprite.cpp(60): warning C4458: declaration of 'ssName' hides class member
+  c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\include\sprite.h(144): note: see declaration of 'Sprite::ssName'
   SpriteSource.cpp
   SpriteText.cpp
   SpriteTilemap.cpp
   Tilemap.cpp
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\highlevelapi\src\tilemap.cpp(75): warning C4018: '>=': signed/unsigned mismatch
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\highlevelapi\src\tilemap.cpp(75): warning C4018: '>=': signed/unsigned mismatch
   Transform.cpp
   Generating Code...
 fmodstudioL64_vc.lib(fmodstudioL64.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR already defined in fmodL64_vc.lib(fmodL64.dll); second definition ignored
 fmodstudioL64_vc.lib(fmodstudioL64.dll) : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
 AntTweakBar64.lib(AntTweakBar64.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR already defined in fmodL64_vc.lib(fmodL64.dll); second definition ignored
 AntTweakBar64.lib(AntTweakBar64.dll) : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
-  HighLevelAPI.vcxproj -> C:\Users\jacob\Documents\_Dev\Robotics\GitHubRepos\Beta-Level-Editor\Beta Engine\HighLevelAPI\\lib\BetaHigh_x64_D.lib
+  HighLevelAPI.vcxproj -> C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\HighLevelAPI\\lib\BetaHigh_x64_D.lib
