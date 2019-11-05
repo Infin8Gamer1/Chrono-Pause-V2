@@ -1,69 +1,78 @@
-/**
-	* Author: David Wong
-	* Project: CS230 Lab 3 (Spaces and Levels)
-	* File Name: Space.cpp
-	* Created: 17 Oct 2018
-**/
+//------------------------------------------------------------------------------
+//
+// File Name:	Space.cpp
+// Author(s):	Jacob Holyfield
+// Project:		BetaEngine
+// Course:		CS230
+//
+// Copyright © 2018 DigiPen (USA) Corporation.
+//
+//------------------------------------------------------------------------------
 
-// Includes //
 #include "stdafx.h"
 #include "Space.h"
-
 #include "Level.h"
+#include "GameObjectManager.h"
+#include <GameObjectFactory.h>
+#include <ResourceManager.h>
+#include <Graphics.h>
+#include <Camera.h>
+#include <Engine.h>
+#include <SpaceManager.h>
 
-Space::Space(const std::string& name)
-	: BetaObject(name), paused(false), currentLevel(nullptr), nextLevel(nullptr), objectManager(this)
+Space::Space(const std::string & name, bool _depth, bool _useFirstSpaceCamera) : BetaObject(name), objectManager(this)
 {
+	paused = false;
+	currentLevel = nullptr;
+	nextLevel = nullptr;
+	camera = new Camera();
+	depth = _depth;
+	useFirstSpaceCamera = _useFirstSpaceCamera;
 }
 
 Space::~Space()
 {
 	Shutdown();
+
+	delete camera;
 }
 
 void Space::Update(float dt)
 {
-	// Update the object manager
-	objectManager.Update(dt);
-	// If there is a next level to go to, then change levels
-	if (nextLevel)
+	//std::cout << "Space::Update" << std::endl;
+
+	if (useFirstSpaceCamera)
 	{
+		Graphics::GetInstance().SetCurrentCamera(*Engine::GetInstance().GetModule<SpaceManager>()->GetSpaceByID(0)->camera);
+		Graphics::GetInstance().SetDepthEnabled(Engine::GetInstance().GetModule<SpaceManager>()->GetSpaceByID(0)->depth);
+	}
+	else {
+		Graphics::GetInstance().SetCurrentCamera(*camera);
+		Graphics::GetInstance().SetDepthEnabled(depth);
+	}
+
+	if (nextLevel != nullptr) {
 		ChangeLevel();
 	}
 
-	// Update the current level we are in, as long as level is not paused
-	if (currentLevel && !paused)
-	{
+	if (currentLevel != nullptr && !paused) {
 		currentLevel->Update(dt);
+		objectManager.Update(dt);
 	}
 }
 
 void Space::Shutdown()
 {
-	// Delete the levels that exist
-	if (currentLevel)
-	{
+	if (currentLevel != nullptr) {
 		currentLevel->Shutdown();
+		objectManager.Shutdown();
+
 		currentLevel->Unload();
+		objectManager.Unload();
+
 		delete currentLevel;
 		currentLevel = nullptr;
 	}
-
-	if (nextLevel)
-	{
-		nextLevel->Shutdown();
-		currentLevel->Unload();
-		delete nextLevel;
-		nextLevel = nullptr;
-	}
-
-	objectManager.Shutdown();
-	objectManager.Unload();
-}
-
-GameObjectManager& Space::GetObjectManager()
-{
-	return objectManager;
 }
 
 bool Space::IsPaused() const
@@ -71,57 +80,67 @@ bool Space::IsPaused() const
 	return paused;
 }
 
-const std::string& Space::GetLevelName() const
+const std::string & Space::GetLevelName() const
 {
-	return currentLevel->GetName();
+	return GetName();
 }
 
-void Space::SetPaused(bool paused_)
+void Space::SetPaused(bool value)
 {
-	paused = paused_;
+	paused = value;
 }
 
-void Space::SetLevel(Level* level)
+void Space::SetLevel(Level * level)
 {
-	// Set the next level (or the first)
 	nextLevel = level;
+	nextLevel->SetParent(this);
+}
 
-	// Set the level's parent
-	level->SetParent(this);
+Level * Space::GetLevel()
+{
+	return currentLevel;
 }
 
 void Space::RestartLevel()
 {
-	nextLevel = currentLevel;
+	SetLevel(currentLevel);
+}
+
+GameObjectManager & Space::GetObjectManager()
+{
+	return objectManager;
+}
+
+Camera * Space::GetCamera()
+{
+	return camera;
 }
 
 void Space::ChangeLevel()
 {
-	// If the levels are the same, then just restart the current level
-	// otherwise, unload and load the next level
-	// However, we always need to shutdown the current level
-	// Set the next level, if it is the same, we already kept track of it
-	if (currentLevel)
-	{
+	//std::cout << "Space::ChangeLevel" << std::endl;
+
+	if (currentLevel == nextLevel) {
+		//Restarting Level
 		currentLevel->Shutdown();
 		objectManager.Shutdown();
-	}
 
-	if (currentLevel != nextLevel)
-	{
-		if (currentLevel)
-		{
+		currentLevel->Initialize();
+	} else {
+		//switching levels
+		if (currentLevel != nullptr) {
+			currentLevel->Shutdown();
+			objectManager.Shutdown();
+
 			currentLevel->Unload();
 			objectManager.Unload();
 		}
-
 		nextLevel->Load();
-		objectManager.Load();
+		nextLevel->Initialize();
+
 		delete currentLevel;
 	}
-	// Set the new states for the levels
+
 	currentLevel = nextLevel;
 	nextLevel = nullptr;
-	// Initialize the next level/restart the current one
-	currentLevel->Initialize();
 }

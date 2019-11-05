@@ -1,53 +1,204 @@
-/**
-* Author: David Wong
-* Project: CS230 Project 2 (Game Object and Game Manager)
-* File Name: GameObject.cpp
-* Created: 8 Nov 2018
-**/
-// Includes //
+//------------------------------------------------------------------------------
+//
+// File Name:	GameObject.cpp
+// Author(s):	Jacob Holyfield
+// Project:		BetaEngine
+// Course:		CS230
+//
+// Copyright © 2018 DigiPen (USA) Corporation.
+//
+//------------------------------------------------------------------------------
+
 #include "stdafx.h"
 #include "GameObject.h"
+#include "Component.h"
+#include "Space.h"
+#include <Parser.h>
+#include <GameObjectFactory.h>
 
-#include "Component.h"			// Component
-
-// Public Member Functions //
-GameObject::GameObject(const std::string& name_)
-	: BetaObject(name_), numComponents(0), isDestroyed(false), isPaused(false)
+GameObject::GameObject(const std::string & name) : BetaObject(name)
 {
-	// Set all the components to be a nullptr
-	for (unsigned i = 0; i < 10; ++i)
-	{
-		components[i] = nullptr;
-	}
+	isDestroyed = false;
+	damageHandler = nullptr;
+	Health = 0;
+	Path = name;
+	gameObjectName = name;
 }
 
-GameObject::GameObject(const GameObject& gameObject)
-	: BetaObject(gameObject.GetName()), isDestroyed(gameObject.isDestroyed), numComponents(gameObject.numComponents), isPaused(false)
+GameObject::GameObject(const GameObject & other) : BetaObject(other.GetName())
 {
-	for (unsigned i = 0; i < 10; ++i)
+
+	for (size_t i = 0; i < other.components.size(); i++)
 	{
-		if (i < numComponents)
-		{
-			components[i] = gameObject.components[i]->Clone();
-			components[i]->SetParent(this);
+		Component* newComp = other.components[i]->Clone();
+
+		if (newComp != nullptr) {
+			AddComponent(newComp);
 		}
-		else
-			components[i] = nullptr;
+		
 	}
+	
+	isDestroyed = false;
+	damageHandler = other.damageHandler;
+	Health = other.Health;
+	Path = other.Path;
 }
 
 GameObject::~GameObject()
 {
-	// Clean up the components
-	for (unsigned i = 0; i < numComponents; ++i)
+	std::vector<Component*>::iterator i;
+
+	for (i = components.begin(); i != components.end(); ++i)
 	{
-		delete components[i];
-	}	
+		delete (*i);
+		*i = nullptr;
+	}
+
+	components.clear();
+	components.shrink_to_fit();
+
+	if (bar != nullptr)
+	{
+		TwDeleteBar(bar);
+	}
+}
+
+void GameObject::Deserialize(Parser & parser)
+{
+	std::string mName = this->GetName();
+	parser.ReadSkip(mName);
+	parser.ReadSkip("{");
+
+	unsigned numComponents = 0;
+	parser.ReadVar(numComponents);
+
+	for (unsigned i = 0; i < numComponents; i++)
+	{
+		std::string componentName;
+		parser.ReadValue(componentName);
+
+		Component* component = GameObjectFactory::GetInstance().CreateComponent(componentName);
+
+		if (component == nullptr) {
+			std::cout << "WARNING : Component " << componentName << " could not be found ... Skipping" << std::endl;
+
+			std::string ref = parser.ReadSkipComponent();
+
+			UnloadedComponentNames.push_back(componentName);
+			UnloadedComponentStrings.push_back(ref);
+
+			//throw ParseException(componentName, "Component " + componentName + " could not be found! ERROR 404");
+		}
+		else {
+			AddComponent(component);
+
+			parser.ReadSkip("{");
+			component->Deserialize(parser);
+			parser.ReadSkip("}");
+		}
+	}
+
+	parser.ReadSkip("}");
+}
+
+void GameObject::DeserializeB(Parser & parser)
+{
+	parser.ReadSkip("{");
+
+	unsigned numComponents = 0;
+	parser.ReadVar(numComponents);
+
+	for (unsigned i = 0; i < numComponents; i++)
+	{
+		std::string componentName;
+		parser.ReadValue(componentName);
+
+		Component* component = GameObjectFactory::GetInstance().CreateComponent(componentName);
+
+		if (component == nullptr) {
+			std::cout << "WARNING : Component " << componentName << " could not be found ... Skipping" << std::endl;
+
+			std::string ref = parser.ReadSkipComponent();
+
+			UnloadedComponentNames.push_back(componentName);
+			UnloadedComponentStrings.push_back(ref);
+
+			//throw ParseException(componentName, "Component " + componentName + " could not be found! ERROR 404");
+		}
+		else {
+			AddComponent(component);
+
+			parser.ReadSkip("{");
+			component->Deserialize(parser);
+			parser.ReadSkip("}");
+		}
+	}
+
+	parser.ReadSkip("}");
+}
+
+void GameObject::Serialize(Parser & parser) const
+{
+	parser.WriteValue(GetName());
+
+	parser.BeginScope();
+
+	size_t numComponents = components.size() + UnloadedComponentNames.size();
+	parser.WriteVar(numComponents);
+
+	for (size_t i = 0; i < components.size(); i++)
+	{
+		//write components name
+		parser.WriteValue(std::string(typeid(*components[i]).name()).substr(6));
+
+		parser.BeginScope();
+
+		components[i]->Serialize(parser);
+
+		parser.EndScope();
+	}
+
+	for (size_t i = 0; i < UnloadedComponentNames.size(); i++)
+	{
+		parser.WriteValue(UnloadedComponentNames[i]);
+
+		parser.WriteValue(UnloadedComponentStrings[i]);
+	}
+
+	parser.EndScope();
+}
+
+void TW_CALL DeleteCallback(void *clientData)
+{
+	// do something
+	GameObject* go = static_cast<GameObject*>(clientData);
+
+	go->Destroy();
+}
+
+TwBar* GameObject::CreateTweakBar(TwBar* bar_)
+{
+	bar = bar_;
+
+	if (bar == nullptr) {
+		std::string name = GetName() + " Properties";
+		bar = TwNewBar(name.c_str());
+		TwDefine(std::string(" '" + name + "' size = '200 300' position = '25 135' alpha = 128 refresh = 0.15 movable = true resizable = true contained = false color = '28 183 255'").c_str());
+	}
+	
+	for (size_t i = 0; i < components.size(); i++)
+	{
+		components[i]->AddVarsToTweakBar(bar);
+	}
+
+	TwAddButton(bar, "Delete Game Object", DeleteCallback, this, NULL);
+
+	return bar;
 }
 
 void GameObject::Initialize()
 {
-	for (unsigned i = 0; i < numComponents; ++i)
+	for (size_t i = 0; i < components.size(); i++)
 	{
 		components[i]->Initialize();
 	}
@@ -55,7 +206,7 @@ void GameObject::Initialize()
 
 void GameObject::Update(float dt)
 {
-	for (unsigned i = 0; i < numComponents; ++i)
+	for (size_t i = 0; i < components.size(); i++)
 	{
 		components[i]->Update(dt);
 	}
@@ -63,7 +214,7 @@ void GameObject::Update(float dt)
 
 void GameObject::FixedUpdate(float dt)
 {
-	for (unsigned i = 0; i < numComponents; ++i)
+	for (size_t i = 0; i < components.size(); i++)
 	{
 		components[i]->FixedUpdate(dt);
 	}
@@ -71,26 +222,33 @@ void GameObject::FixedUpdate(float dt)
 
 void GameObject::Draw()
 {
-	for (unsigned i = 0; i < numComponents; ++i)
+	for (size_t i = 0; i < components.size(); i++)
 	{
 		components[i]->Draw();
 	}
 }
 
-void GameObject::AddComponent(Component* component)
+size_t GameObject::NumberOfComponents()
 {
-	component->SetParent(this);
-	components[numComponents++] = component;
+	return components.size();
 }
 
-Component* GameObject::GetComponent(const std::string& name_)
+void GameObject::AddComponent(Component * component)
 {
-	for (unsigned i = 0; i < numComponents; ++i)
-	{
-		if (name_ == components[i]->GetName())
-			return components[i];
-	}
+	component->SetParent(this);
+	components.push_back(component);
+}
 
+Component * GameObject::GetComponent(const std::string & _name)
+{
+	for (size_t i = 0; i < components.size(); i++)
+	{
+		if (components[i]->GetName() == _name)
+		{
+			return components[i];
+		}
+	}
+	//std::cout << "No component with the name " + _name + " was found!" << std::endl;
 	return nullptr;
 }
 
@@ -104,17 +262,50 @@ bool GameObject::IsDestroyed() const
 	return isDestroyed;
 }
 
-void GameObject::SetPaused(bool paused)
+Space * GameObject::GetSpace() const
 {
-	isPaused = paused;
+	return static_cast<Space*>(GetParent());
 }
 
-bool GameObject::IsPaused() const
+void GameObject::setDamageHandler(DamageEventHandler handler)
 {
-	return isPaused;
+	damageHandler = handler;
 }
 
-Space* GameObject::GetSpace() const
+void GameObject::DealDamage(GameObject & damegedGO, GameObject & damageCauser, int ammount, std::string damageType)
 {
-	return reinterpret_cast<Space*>(GetParent());
+	if (damegedGO.damageHandler == nullptr) {
+		return;
+	}
+
+	damegedGO.damageHandler(ammount, damageType, damageCauser, damegedGO);
+}
+
+int GameObject::getHealth()
+{
+	return Health;
+}
+
+void GameObject::setHealth(int _health) {
+	Health = _health;
+}
+
+std::string GameObject::GetSavePath()
+{
+	return Path;
+}
+
+void GameObject::SetSavePath(std::string _Path)
+{
+	Path = _Path;
+}
+
+const std::string & GameObject::GetName() const
+{
+	return gameObjectName;
+}
+
+void GameObject::SetName(const std::string& newName)
+{
+	gameObjectName = newName;
 }

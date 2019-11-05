@@ -90,6 +90,15 @@ public:
 	//   objectName = The name of the objects that should be counted.
 	unsigned GetObjectCount(const std::string& objectName) const;
 
+	// Destroys all of the gameobjects in the scene Imeadiatly
+	void DestroyAllObjects();
+
+	// Returns a copy of the active game objects
+	std::vector<GameObject*> GetGameObjectActiveList();
+
+	// Returns a unique name 
+	std::string GenerateUniqueGameObjectName(const std::string& name);
+
 private:
 	// Disable copy constructor and assignment operator
 	GameObjectManager(const GameObjectManager&) = delete;
@@ -115,17 +124,19 @@ private:
 	//------------------------------------------------------------------------------
 	
 	// Objects
-	static const size_t maxObjects = 200;
+	std::vector<GameObject*> gameObjectActiveList;
+	/*static const size_t maxObjects = 200;
 	GameObject* gameObjectActiveList[maxObjects];
-	size_t numObjects;
+	size_t numObjects;*/
 	
 	// Archetypes
-	static const size_t maxArchetypes = 30;
+	std::vector<GameObject*> gameObjectArchetypes;
+	/*static const size_t maxArchetypes = 30;
 	GameObject* gameObjectArchetypes[maxArchetypes];
-	size_t numArchetypes;
+	size_t numArchetypes;*/
 	
 	// Time
-	const float fixedUpdateDt;
+	const float fixedUpdateDt = 1.0f/60.0f;
 	float timeAccumulator;
 };
 

@@ -79,8 +79,8 @@ public:
 	// Public Data
 	//------------------------------------------------------------------------------
 
-	// The matrix is stored in column-major format, meaning the consecutive
-	//   elements of columns are contiguous.
+	// The matrix is stored in row-major format, meaning the consecutive
+	//   elements of rows are contiguous.
 	//   m[row][column]
 	float m[3][3];
 

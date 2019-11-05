@@ -70,4 +70,53 @@ bool RectangleRectangleIntersection(const BoundingRectangle& rect1, const Boundi
 //   True if intersection, false otherwise.
 bool RectangleCircleIntersection(const BoundingRectangle& rect, const Circle& circle);
 
+// Check whether a moving point and line intersect.
+// Params:
+//  staticLine   = Start and end of first line segment.
+//  movingPoint = Start and end of second line segment (usually a moving point).
+//  intersection = Intersection point, if any.
+//  t = The t value from the intersection calculation.
+// Returns:
+//   True if intersection, false otherwise.
+bool MovingPointLineIntersection(const LineSegment& staticLine, const LineSegment& movingPoint, Vector2D& intersection, float& t);
+
+// Modifies object's position, velocity, and rotation using simple point-line reflection.
+// Params:
+//  transform = Transform of the object that is being reflected.
+//  physics   = Physics of the object being reflected.
+//  staticLine   = Start and end of first line segment.
+//  movingPoint = Start and end of second line segment (usually a moving point).
+//  intersection = Intersection point of the line and circle. 
+void MovingPointLineReflection(Transform& transform, Physics& physics, const LineSegment& staticLine, const LineSegment& movingPoint, const Vector2D& intersection);
+
+// Reflects a point over a line.
+// Params:
+//   point = The point being reflected.
+//   line = The line the point will be reflected over.
+// Returns:
+//   The reflected point.
+Vector2D ReflectPointOverLine(const Vector2D& point, const LineSegment& line);
+
+// Checks whether a point is between two parallel lines.
+// Params:
+//   point = The point in question.
+//   firstLine = A point on the first line.
+//   secondLine = A point on the second line.
+//   normal = Normal vector to the two lines.
+// Returns:
+//   True if the point is between the two lines, false otherwise.
+bool PointIsBetweenLines(const Vector2D& point, const Vector2D& firstLine, const Vector2D& secondLine, const Vector2D& normal);
+
+
+// Check whether a moving point and line intersect.
+// Params:
+//  staticLine   = Start and end of first line segment.
+//  movingPoint = Start and end of second line segment (usually a moving point).
+//  radius = the radius of the circle
+//  intersection = Intersection point, if any.
+//  t = The t value from the intersection calculation.
+// Returns:
+//   True if intersection, false otherwise.
+bool MovingCircleLineIntersection(const LineSegment& staticLine, const LineSegment& movingPoint, const float radius, Vector2D& intersection, float& t);
+
 //------------------------------------------------------------------------------

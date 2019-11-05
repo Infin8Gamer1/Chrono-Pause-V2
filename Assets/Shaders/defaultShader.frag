@@ -19,6 +19,12 @@ void main()
 		
 	if(offsetTexCoord.y > 1.0)
 		offsetTexCoord.y -= 1.0;
-		
-	fragColor = texture2D(diffuse, offsetTexCoord) * vertexColor * blendColor * tintColor;
+	
+	vec4 texel = texture2D(diffuse, offsetTexCoord);
+
+	// Don't bother drawing if pixel is mostly transparent
+	if(texel.a < 0.4)
+		discard;
+
+	fragColor = texel * vertexColor * blendColor * tintColor;
 }

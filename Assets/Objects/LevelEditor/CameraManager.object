@@ -1,0 +1,12 @@
+CameraManager
+{
+  numComponents : 1
+  CameraMovement
+  {
+	UP : W
+	DOWN : S
+	LEFT : A
+	RIGHT : D
+	Speed : 5.0
+  }
+}

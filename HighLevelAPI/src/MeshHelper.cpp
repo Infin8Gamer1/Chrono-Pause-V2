@@ -1,45 +1,33 @@
-/**
-	* Author: David Wong
-	* Email: david.wongcascante@digipen.edu
-	* Project: CS230 Lab 4 -- Graphics
-	* File name: MeshHelper.cpp
-**/
+//------------------------------------------------------------------------------
+//
+// File Name:	MeshHelper.cpp
+// Author(s):	Jacob Holyfield
+// Project:		BetaEngine
+// Course:		CS230
+//
+// Copyright © 2018 DigiPen (USA) Corporation.
+//
+//------------------------------------------------------------------------------
 
-// Includes //
 #include "stdafx.h"
 #include "MeshHelper.h"
+#include <MeshFactory.h>
+#include <Vertex.h>
 
-#include <MeshFactory.h>	// Mesh Factory
-#include <Vertex.h>			// Vertices
-#include <Color.h>			// Color
-
-// Global Helper Functions //
-
-Mesh* CreateTriangleMesh(const Color& color1, const Color& color2, const Color& color3)
+Mesh * CreateTriangleMesh(const Color & color0, const Color & color1, const Color & color2)
 {
-	// Prepare the mesh factory to create a triangle mesh
-	MeshFactory::GetInstance().AddTriangle(Vertex(Vector2D(-0.5f, 0.5f), color1), Vertex(Vector2D(-0.5f, -0.5f), color2),
-		Vertex(Vector2D(0.5f, 0.0f), color3));
-
-	// Get the triangle mesh from the factory
+	MeshFactory::GetInstance().AddTriangle(Vertex(Vector2D(-0.5,0.5), color0), Vertex(Vector2D(-0.5, -0.5), color1), Vertex(Vector2D(0.5, 0), color2));
 	return MeshFactory::GetInstance().EndCreate();
 }
 
-Mesh* CreateQuadMesh(const Vector2D& textureSize, const Vector2D& extents)
+Mesh * CreateQuadMesh(const Vector2D & textureSize, const Vector2D & extents)
 {
-	// Create the vertices for the quad based on the parameters
-	Vertex quadVertices[] = 
-	{
-		Vertex(Vector2D(-extents.x,  extents.y), Vector2D(0, 0)),
-		Vertex(Vector2D(-extents.x, -extents.y), Vector2D(0, textureSize.y)),
-		Vertex(Vector2D( extents.x, -extents.y), Vector2D(textureSize.x, textureSize.y)),
-		Vertex(Vector2D( extents.x,  extents.y), Vector2D(textureSize.x, 0)),
-	};
+	Vertex p1 = Vertex(Vector2D(-0.5f * extents.x, -0.5f * extents.y), Vector2D(0 * textureSize.x, 1 * textureSize.y));
+	Vertex p2 = Vertex(Vector2D(0.5f  * extents.x, -0.5f * extents.y), Vector2D(1 * textureSize.x, 1 * textureSize.y));
+	Vertex p3 = Vertex(Vector2D(-0.5f * extents.x, 0.5f  * extents.y), Vector2D(0 * textureSize.x, 0 * textureSize.y));
+	Vertex p4 = Vertex(Vector2D(0.5f  * extents.x, 0.5f  * extents.y), Vector2D(1 * textureSize.x, 0 * textureSize.y));
 
-	// Prepare the mesh factory to create a quad
-	MeshFactory::GetInstance().AddTriangle(quadVertices[3], quadVertices[0], quadVertices[1]);
-	MeshFactory::GetInstance().AddTriangle(quadVertices[1], quadVertices[2], quadVertices[3]);
-	
-	// Finally create the mesh
+	MeshFactory::GetInstance().AddTriangle(p1, p2, p3);
+	MeshFactory::GetInstance().AddTriangle(p2, p4, p3);
 	return MeshFactory::GetInstance().EndCreate();
 }

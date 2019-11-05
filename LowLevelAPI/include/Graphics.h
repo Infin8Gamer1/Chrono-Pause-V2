@@ -12,12 +12,17 @@
 #pragma once
 
 //------------------------------------------------------------------------------
+// Include Libraries:
+//------------------------------------------------------------------------------
+
+#pragma comment(lib, "opengl32.lib")
+
+//------------------------------------------------------------------------------
 // Include Files:
 //------------------------------------------------------------------------------
 
 #include "Matrix2D.h"
 #include "Color.h"
-#include "Matrix3D.h"
 #include "Camera.h"
 #include "Texture.h"
 #include "Shapes2D.h"
@@ -47,17 +52,11 @@ enum BlendMode
 	BM_Num
 };
 
-enum TextureFilterMode
-{
-	TM_NearestNeighbor = 0,
-	TM_Bilinear,
-	TM_Trilinear
-};
-
 enum RenderMode
 {
 	RM_None = -1,
 	RM_Forward,
+	//RM_Deferred,
 
 	// Keep this one last
 	RM_Num,
@@ -74,67 +73,96 @@ public:
 	// Public Functions:
 	//------------------------------------------------------------------------------
 
+	//////////////////////
+	// ENGINE FUNCTIONS //
+	//////////////////////
+
 	void Init(unsigned width, unsigned height);
 	void FrameStart();
 	void Draw(unsigned arrayObjectID, unsigned drawMode, unsigned numVertices);
 	void FrameEnd();
 	void Shutdown();
 
-	void SetRenderMode(RenderMode mode);
+	/////////////////////
+	// COMMON SETTINGS //
+	/////////////////////
 
+	// Otherwise uncolored pixels will have this color
 	const Color& GetBackgroundColor() const;
 	void SetBackgroundColor(const Color& color = Colors::Black);
+
+	// Color to blend with whole screen
 	const Color& GetScreenTintColor() const;
 	void SetScreenTintColor(const Color& color = Colors::White);
+
+	// Color to blend with the current sprite's color
 	void SetSpriteBlendColor(const Color& color = Colors::White);
 
-	void SetBlendMode(BlendMode mode, bool forceSet = false);
-	void SetTexture(Texture* texture, const Vector2D& uv = Vector2D());
-	void SetTransform(const Matrix2D& matrix);
-	void SetTransform(const Vector2D& translation, const Vector2D& scale = Vector2D(1.0f, 1.0f), float rotation = 0.0f);
+	// Texture to use when drawing
+	void SetTexture(const Texture* texture, const Vector2D& uv = Vector2D());
 
+	// Transform
+	void SetTransform(const Matrix2D& matrix, float depth = 0.0f);
+	void SetTransform(const Vector2D& translation, const Vector2D& scale = Vector2D(1.0f, 1.0f), float rotation = 0.0f, float depth = 0.0f);
+
+	// Camera
 	Camera& GetDefaultCamera();
 	Camera& GetCurrentCamera();
-	void SetCurrentCamera(Camera& camera); 
+	void SetCurrentCamera(Camera& camera);
 
-	const BoundingRectangle GetScreenWorldDimensions() const;
+	// Screen to world
+	const BoundingRectangle GetScreenWorldDimensions(const Camera* camera = nullptr) const;
+	Vector2D ScreenToWorldPosition(const Vector2D& screenPosition, const Camera* camera = nullptr) const;
 
-	Vector2D ScreenToWorldPosition(const Vector2D& screenPosition);
+	////////////////////
+	// OTHER SETTINGS //
+	////////////////////
 
-	// SETTINGS
-	// Test whether vertical sync is currently on
-	bool GetUseVsync() const;
-	// Turn vertical sync on or off - will cause performance issues on some machines
-	void SetUseVSync(bool useVsync);
+	// Test whether depth is currently enabled.
+	bool IsDepthEnabled() const;
+	// Enable (limited) perspective and depth test.
+	// WARNING: Objects drawn at the same depth may occlude each other.
+	void SetDepthEnabled(bool enabled);
+
+	// Sets how sprites are blended
+	void SetBlendMode(BlendMode mode, bool forceSet = false);
 
 	// Test whether the application is in fullscreen mode.
 	bool IsFullScreen() const;
 	// Set whether the window is fullscreen.
 	void SetFullScreen(bool fullscreen);
 
-	// Sets the resolution of the window.
+	// Set the resolution of the window.
 	// Params:
 	//   width = The new width of the window.
 	//   height = The new height of the window.
 	void SetResolution(unsigned width, unsigned height);
 
+	///////////////////////
+	// ADVANCED SETTINGS //
+	///////////////////////
+
+	// Test whether vertical sync is currently on
+	bool GetUseVsync() const;
+	// Turn vertical sync on or off - will cause performance issues on some machines
+	void SetUseVSync(bool useVsync);
+
+	// Set the dimensions of the viewport.
+	// Params:
+	//   width = The new width of the viewport.
+	//   height = The new height of the viewport.
+	void SetViewport(int width, int height);
+
+	// Sets the current render mode - currently only one setting available.
+	void SetRenderMode(RenderMode mode);
+
+	// Has graphics been initialized?
+	bool IsInitialized() const;
+
 	// Gets the single instance of the Graphics class.
 	static Graphics& GetInstance();
 
 private:
-	//------------------------------------------------------------------------------
-	// Private Structures:
-	//------------------------------------------------------------------------------
-
-	enum OriginMode
-	{
-		OM_Normal = 0,
-		OM_Top_Left,
-
-		// Keep this one last
-		OM_NUM,
-	};
-
 	//------------------------------------------------------------------------------
 	// Private Functions:
 	//------------------------------------------------------------------------------
@@ -147,53 +175,12 @@ private:
 	Graphics(const Graphics& other) = delete;
 	Graphics& operator=(const Graphics& other) = delete;
 
-	// Other private functions
-	void SetViewport();
-	void SetOriginMode(OriginMode mode, bool forceSet = false);
-	void CreateContext();
-	void InitRenderer();
-
 	//------------------------------------------------------------------------------
 	// Private Variables:
 	//------------------------------------------------------------------------------
 
-	// Colors and blending
-	Color backgroundColor;
-	Color tintColor;
-	Color blendColor;
-	BlendMode blendMode;
-
-	// Textures
-	Texture* defaultTexture;
-	Texture* currentTexture;
-	Vector2D textureCoords;
-	float alpha;
-	ULONG_PTR gdiplusToken; // GDI+ for loading textures
-
-	// Viewport
-	int viewportWidth;
-	int viewportHeight;
-	int windowPositionX;
-	int windowPositionY;
-
-	// Transformations
-	OriginMode originMode;
-	Matrix3D worldMatrix;
-	Matrix3D viewMatrix;
-	Matrix3D projectionMatrix;
-
-	// Cameras
-	Camera defaultCamera;
-	Camera* currentCamera;
-
-	// Renderer
-	Renderer* renderers[RM_Num] = { nullptr };
-	RenderMode renderModeCurrent;
-	RenderMode renderModeNext;
-
-	// Settings
-	bool useVsync;
-	bool fullscreen;
+	class Implementation;
+	Implementation* pimpl;
 };
 
 //------------------------------------------------------------------------------

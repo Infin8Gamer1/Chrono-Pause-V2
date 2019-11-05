@@ -1,15 +1,19 @@
-/**
-	* Author: David Wong
-	* Description: To describe how a physics object behaves
-	* Project: CS230 Lab 5
-**/
+//------------------------------------------------------------------------------
+//
+// File Name:	Physics.cpp
+// Author(s):	Jacob Holyfield
+// Project:		BetaEngine
+// Course:		CS230
+//
+// Copyright © 2018 DigiPen (USA) Corporation.
+//
+//------------------------------------------------------------------------------
 
-// Includes //
 #include "stdafx.h"
-#include "Physics.h"			// Physics
-
-#include "Transform.h"			// Transform	
-#include "GameObject.h"			// Game Object
+#include "Physics.h"
+#include "Transform.h"
+#include "GameObject.h"
+#include <Parser.h>
 
 Physics::Physics() : Component("Physics")
 {
@@ -38,16 +42,42 @@ Physics::Physics() : Component("Physics")
 	gravity = Vector2D(0,0);
 }
 
+Component * Physics::Clone() const
+{
+	return new Physics();
+}
 
+void Physics::Deserialize(Parser & parser)
+{
+	parser.ReadVariable("acceleration", acceleration);
+
+	parser.ReadVariable("velocity", velocity);
+
+	parser.ReadVariable("angularVelocity", angularVelocity);
+
+	float mass;
+	parser.ReadVariable("mass", mass);
+	SetMass(mass);
+
+	parser.ReadVariable("gravity", gravity);
+}
+
+void Physics::Serialize(Parser & parser) const
+{
+	parser.WriteVariable("acceleration", acceleration);
+
+	parser.WriteVariable("velocity", velocity);
+
+	parser.WriteVariable("angularVelocity", angularVelocity);
+
+	parser.WriteVariable("mass", 1 / inverseMass);
+
+	parser.WriteVariable("gravity", gravity);
+}
 
 void Physics::Initialize()
 {
-	transform = static_cast<Transform*>(GetOwner()->GetComponent("Transform"));
-}
-
-Component* Physics::Clone() const
-{
-	return new Physics(*this);
+	transform = GetOwner()->GetComponent<Transform>();
 }
 
 void Physics::Update(float dt)
@@ -57,32 +87,34 @@ void Physics::Update(float dt)
 	AddForce(gravity);
 
 	acceleration = forcesSum * inverseMass;
-	// Reset the forcases
-	forcesSum = Vector2D();
+	//std::cout << "forceSum : " << forcesSum.x << ", " << forcesSum.y << std::endl;
+	forcesSum = Vector2D(0, 0);
 }
 
 void Physics::FixedUpdate(float dt)
 {
-	// Calculate the velocity
-	velocity += acceleration * dt;
-	// Save the Old Translation
+	velocity = velocity + acceleration * dt;
+
 	oldTranslation = transform->GetTranslation();
-	// Update the translation
-	Vector2D newTranslation(oldTranslation + velocity * dt);
-	transform->SetTranslation(newTranslation);
-	// Update the rotation
+
+	transform->SetTranslation(oldTranslation + velocity * dt);
+
 	transform->SetRotation(transform->GetRotation() + angularVelocity * dt);
 }
 
-// Accessors
-const Vector2D& Physics::GetAcceleration() const
+void Physics::SetVelocity(const Vector2D & _velocity)
 {
-	return acceleration;
+	velocity = _velocity;
 }
 
-const Vector2D& Physics::GetVelocity() const
+const Vector2D & Physics::GetVelocity() const
 {
 	return velocity;
+}
+
+void Physics::SetAngularVelocity(float _velocity)
+{
+	angularVelocity = _velocity;
 }
 
 float Physics::GetAngularVelocity() const
@@ -90,20 +122,24 @@ float Physics::GetAngularVelocity() const
 	return angularVelocity;
 }
 
-const Vector2D& Physics::GetOldTranslation() const
+void Physics::SetMass(float mass)
+{
+	inverseMass = 1 / mass;
+}
+
+void Physics::AddForce(const Vector2D & force)
+{
+	forcesSum += force;
+}
+
+const Vector2D & Physics::GetAcceleration() const
+{
+	return acceleration;
+}
+
+const Vector2D & Physics::GetOldTranslation() const
 {
 	return oldTranslation;
-}
-
-// Mutators
-void Physics::SetVelocity(const Vector2D& velocity_)
-{
-	velocity = velocity_;
-}
-
-void Physics::SetAngularVelocity(float angularVelocity_)
-{
-	angularVelocity = angularVelocity_;
 }
 
 void Physics::SetGravity(Vector2D _gravity)
@@ -114,15 +150,4 @@ void Physics::SetGravity(Vector2D _gravity)
 Vector2D Physics::GetGravity()
 {
 	return gravity;
-}
-
-void Physics::SetMass(float mass_)
-{
-	inverseMass = 1.0f / mass_;
-}
-
-// Adds a one-frame force to the object
-void Physics::AddForce(const Vector2D& force)
-{
-	forcesSum += force;
 }

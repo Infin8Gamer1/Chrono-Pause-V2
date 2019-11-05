@@ -1,45 +1,127 @@
-/**
-* Author: David Wong
-* Email: david.wongcascante@digipen.edu
-* Project: CS230 Lab 4 -- Graphics
-* File name: MeshHelper.cpp
-**/
+//------------------------------------------------------------------------------
+//
+// File Name:	SpriteSource.cpp
+// Author(s):	Jacob Holyfield
+// Project:		BetaEngine
+// Course:		CS230
+//
+// Copyright © 2018 DigiPen (USA) Corporation.
+//
+//------------------------------------------------------------------------------
 
-// Includes //
 #include "stdafx.h"
 #include "SpriteSource.h"
-
 #include <Vector2D.h>
+#include <Texture.h>
+#include <Parser.h>
+#include <ResourceManager.h>
+#include <Texture.h>
 
-// Public Member Functions //
-
-SpriteSource::SpriteSource(int numCols_, int numRows_, Texture* texture_)
-	: numCols(numCols_), numRows(numRows_), texture(texture_)
+SpriteSource::SpriteSource(std::string _name, unsigned numColsInput, unsigned numRowsInput, unsigned frameCountInput, unsigned frameStartInput, Texture * textureInput) : Serializable()
 {
+	numRows = numRowsInput;
+	numCols = numColsInput;
+	frameCount = frameCountInput;
+	frameStart = frameStartInput;
+	texture = textureInput;
+
+	if (_name == "") {
+		name = textureInput->GetName() + "_" + std::to_string(frameStart) + "_" + std::to_string(frameCount);
+	}
+	else {
+		name = _name;
+	}
+	
 }
 
-// Accessors //
+void SpriteSource::Deserialize(Parser & parser)
+{
+	std::string mName = this->GetName();
+	parser.ReadSkip(mName);
+	parser.ReadSkip("{");
 
-Texture* SpriteSource::GetTexture() const
+	std::string textureName;
+	parser.ReadVariable("textureName", textureName);
+	parser.ReadVariable("textureRows", numRows);
+	parser.ReadVariable("textureColumns", numCols);
+	parser.ReadVariable("frameCount", frameCount);
+	parser.ReadVariable("frameStart", frameStart);
+
+	if (textureName != "null" && textureName != "none") {
+		texture = ResourceManager::GetInstance().GetTexture(textureName);
+	}
+
+	parser.ReadSkip("}");
+}
+
+void SpriteSource::Serialize(Parser & parser) const
+{
+	parser.WriteValue(GetName());
+
+	parser.BeginScope();
+
+	parser.WriteVariable("textureName", GetTexture()->GetName());
+	parser.WriteVariable("textureRows", numRows);
+	parser.WriteVariable("textureColumns", numCols);
+	parser.WriteVariable("frameCount", frameCount);
+	parser.WriteVariable("frameStart", frameStart);
+
+	parser.EndScope();
+}
+
+Texture * SpriteSource::GetTexture() const
 {
 	return texture;
 }
 
-unsigned SpriteSource::GetFrameCount() const
+void SpriteSource::SetTexture(Texture * _texture)
 {
-	return numCols * numRows;
+	this->texture = _texture;
 }
 
-void SpriteSource::GetUV(unsigned int frameIndex, Vector2D & textureCoords) const
+unsigned SpriteSource::GetFrameCountTexture() const
 {
-	// The size that every frame takes up
-	float deltaU = 1.0f / static_cast<float>(numCols);
-	float deltaV = 1.0f / static_cast<float>(numRows);
+	return numRows * numCols;
+}
 
-	// Determine in which column and row we are in using a frame index
-	unsigned U = frameIndex % numCols;
-	unsigned V = frameIndex / numCols;
-	// Return the top left corner of the texture coordinate
-	textureCoords.x = U * deltaU;
-	textureCoords.y = V * deltaV;
+unsigned SpriteSource::GetFrameCount() const
+{
+	return frameCount;
+}
+
+unsigned SpriteSource::GetFrameStart() const
+{
+	return frameStart;
+}
+
+std::string SpriteSource::GetName() const
+{
+	return name;
+}
+
+void SpriteSource::SetName(const std::string &Name)
+{
+	name = Name;
+}
+
+const Vector2D SpriteSource::GetUV(unsigned int frameIndex) const
+{
+	
+	float k_X = 1.0f / static_cast<float>(numCols);
+	float k_Y = 1.0f / static_cast<float>(numRows);
+
+	float xOffset = k_X * (frameIndex % numCols);
+	float yOffset = k_Y * (frameIndex / numCols);
+
+	return Vector2D(xOffset, yOffset);
+}
+
+const std::string & SpriteSource::GetTextureName() const
+{
+	return texture->GetName();
+}
+
+const Vector2D SpriteSource::GetTextureDimensions() const
+{
+	return Vector2D((float)numCols, (float)numRows);
 }

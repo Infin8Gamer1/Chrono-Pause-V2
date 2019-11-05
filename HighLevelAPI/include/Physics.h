@@ -44,6 +44,12 @@ public:
 	// Clone the physics component, returning a dynamically allocated copy.
 	Component* Clone() const override;
 
+	// Loads object data from a file.
+	void Deserialize(Parser& parser) override;
+
+	// Saves object data to a file.
+	void Serialize(Parser& parser) const override;
+
 	// Initialize components.
 	void Initialize() override;
 

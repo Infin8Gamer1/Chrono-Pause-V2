@@ -52,7 +52,7 @@ public:
 	// Returns the handle for the window used by the program.
 	GLFWwindow* GetWindowHandle() const;
 
-	// Sets the title of the window being used by Beta Framework.
+	// Set the title of the window being used by Beta Framework.
 	// Params: 
 	//   text = The string that the window title will be set to.
 	void SetWindowTitle(const std::string& text);
@@ -63,11 +63,10 @@ public:
 	// Retrieve the instance of the System singleton.
 	static System& GetInstance();
 
-	// Default callback function is friend
+	// GLFW callbacks
 	friend void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-
-	// GLFW callbacks are also friends
 	friend void WinCloseCallback(GLFWwindow* window);
+	friend void ViewportChangeCallback(GLFWwindow* window, int width, int height);
 
 private:
 	//------------------------------------------------------------------------------
@@ -124,11 +123,9 @@ private:
 	// Private Variables:
 	//------------------------------------------------------------------------------
 
-	// Other static data
-	bool	winExists;
-
 	// Window information
-	SystemInfo systemInfo;
+	bool		winExists;
+	SystemInfo	systemInfo;
 	GLFWwindow* glfwWindow;
 };
 /*----------------------------------------------------------------------------*/

@@ -13,14 +13,17 @@
 #include "Animation.h"
 #include "Sprite.h"
 #include "GameObject.h"
+#include <SpriteSource.h>
 
 Animation::Animation() : Component("Animation")
 {
 	frameIndex = 0;
-	frameCount = 0;
-	frameStart = 0;
 
+	frameStart = 0;
+	frameEnd = 0;
+	
 	frameDelay = 0;
+
 	frameDuration = 20;
 
 	isRunning = false;
@@ -29,40 +32,68 @@ Animation::Animation() : Component("Animation")
 	playInReverse = false;
 
 	sprite = nullptr;
+
+	lastSpriteSource = nullptr;
 }
 
 Component * Animation::Clone() const
 {
-	return new Animation(*this);
+	Animation* out = new Animation();
+
+	//out->sprite = sprite;
+
+	return out;
 }
 
 void Animation::Initialize()
 {
-	sprite = static_cast<Sprite*>(GetOwner()->GetComponent("Sprite"));
+	sprite = GetOwner()->GetComponent<Sprite>();
+
+	lastSpriteSource = sprite->GetSpriteSource();
 }
 
-void Animation::Play(unsigned frameStartInput, unsigned frameCountInput, float frameDurationInput, bool isLoopingInput, bool playInReverseInput)
+void Animation::Play(float frameDurationInput, bool isLoopingInput, bool playInReverseInput)
 {
 	//std::cout << "Animation::Play" << std::endl;
 
-	frameStart = frameStartInput;
-	frameIndex = frameStartInput;
-	frameCount = frameCountInput;
-	frameDelay = frameDurationInput;
-	frameDuration = frameDurationInput;
+	lastSpriteSource = sprite->GetSpriteSource();
+
 	isLooping = isLoopingInput;
 	playInReverse = playInReverseInput;
 
+
+	if (!playInReverse) {
+		frameStart = sprite->GetSpriteSource()->GetFrameStart();
+		frameEnd = sprite->GetSpriteSource()->GetFrameStart() + sprite->GetSpriteSource()->GetFrameCount() - 1;
+	}
+	else {
+		frameStart = sprite->GetSpriteSource()->GetFrameStart() + sprite->GetSpriteSource()->GetFrameCount() - 1;
+		frameEnd = sprite->GetSpriteSource()->GetFrameStart();
+	}
+	
+	frameIndex = frameStart;
+
+	//std::cout << "Start : " << frameStart << ", End : " << frameEnd << std::endl;
+
+	GetOwner()->GetComponent<Sprite>()->SetFrame(frameIndex);
+
+	frameDuration = frameDurationInput;
+	frameDelay = frameDuration;
+
 	isRunning = true;
 	isDone = false;
-
-	static_cast<Sprite*>(GetOwner()->GetComponent("Sprite"))->SetFrame(frameIndex);
 }
 
-void Animation::Update(float dt)
+void Animation::FixedUpdate(float dt)
 {
-	//std::cout << "Animation::Update" << std::endl;
+	//std::cout << "Animation::FixedUpdate" << std::endl;
 
+	//check if sprite source has been updated
+	if (lastSpriteSource != sprite->GetSpriteSource()) {
+		lastSpriteSource = sprite->GetSpriteSource();
+		Play(frameDuration, isLooping, playInReverse);
+	}
+	
 	isDone = false;
 
 	if (!isRunning) {
@@ -71,30 +102,33 @@ void Animation::Update(float dt)
 
 	frameDelay -= dt;
 
+	//move on to the next frame if delay has been reached
 	if (frameDelay <= 0.0f) {
+		
+
+		//move frame up or down
 		if (playInReverse) {
 			frameIndex--;
-		}
-		else {
+		} else {
 			frameIndex++;
 		}
 
-		if (frameIndex >= frameCount || (frameIndex < 0 && playInReverse)) {
-			if (isLooping) {
+		if ((frameIndex > frameEnd && !playInReverse) || (frameIndex < frameEnd && playInReverse))
+		{
+			if (isLooping)
+			{
 				frameIndex = frameStart;
 				isDone = true;
 				isRunning = true;
-				sprite->SetFrame(frameIndex);
-			}
-			else {
+			} else {
+				frameIndex = frameStart;
 				isDone = true;
 				isRunning = false;
-				sprite->SetFrame(frameIndex);
 			}
 		}
-		else {
-			sprite->SetFrame(frameIndex);
-		}
+
+		sprite->SetFrame(frameIndex);
+
 		frameDelay = frameDuration;
 	}
 }
@@ -104,7 +138,11 @@ bool Animation::IsDone() const
 	return isDone;
 }
 
-bool Animation::IsRunning() const
+bool Animation::IsRunning() const {
+	return isRunning;
+}
+
+void Animation::SetFrameDuration(float duration)
 {
-    return isRunning;
+	frameDuration = duration;
 }

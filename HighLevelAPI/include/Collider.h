@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	Collider.h
-// Author(s):	Jeremy Kings (j.kings), David Wong (david.wongcascante)
+// Author(s):	Jeremy Kings (j.kings)
 // Project:		BetaFramework
 // Course:		WANIC VGP2
 //
@@ -37,6 +37,7 @@ typedef enum ColliderType
 	ColliderTypeCircle,
 	ColliderTypeRectangle,
 	ColliderTypeTilemap,
+	ColliderTypeLines,
 } ColliderType;
 
 //------------------------------------------------------------------------------
@@ -79,18 +80,17 @@ public:
 	//   type = The type of collider (see the ColliderType enum).
 	Collider(ColliderType type);
 
+	~Collider();
+
 	// Set component pointers.
 	void Initialize() override;
+
+	// Add Component Spific Vars to a Tweak Bar
+	void AddVarsToTweakBar(TwBar* bar) override;
 
 	// Draw collision shape
 	virtual void Draw() = 0;
 
-	// Sets whether the collider is enabled or not
-	// Params:
-	//   enabled: Whether the collider is enabled or not
-	void SetEnabled(bool enabled);
-	// Returns: whether the collider is enabled
-	bool IsEnabled() const;
 	// Check if two objects are colliding and send collision events.
 	// Params:
 	//	 other = Reference to the second collider component.
@@ -117,6 +117,20 @@ public:
 	// Get the map collision handler function pointer.
 	MapCollisionEventHandler GetMapCollisionHandler() const;
 
+	// Save object data to file.
+	// Params:
+	//   parser = The parser object used to save the object's data.
+	void BaseSerialize(Parser& parser) const;
+
+	// Load object data from file
+	// Params:
+	//   parser = The parser object used to load the object's data.
+	void BaseDeserialize(Parser & parser);
+
+	void Disable();
+
+	void Enable();
+
 protected:
 	//------------------------------------------------------------------------------
 	// Protected Variables:
@@ -125,10 +139,25 @@ protected:
 	// Component pointers
 	Transform* transform;
 	Physics* physics;
-	// Whether the collider is working or not
-	bool enabled;
 
 private:
+
+	// C++ template to print vector container elements 
+	template <typename T>
+	std::string printVector(const std::vector<T>& v) const
+	{
+		std::string os;
+		for (int i = 0; i < v.size(); ++i) {
+			os = os + v[i] + ", ";
+		}
+
+		os = os.substr(0, os.find_last_of(","));
+
+		return os;
+	}
+
+	std::vector<std::string> explodeString(const std::string& str, const char& ch);
+
 	//------------------------------------------------------------------------------
 	// Private Variables:
 	//------------------------------------------------------------------------------
@@ -141,6 +170,16 @@ private:
 	
 	// Function pointer for tilemap collision handling
 	MapCollisionEventHandler mapHandler;
+
+	bool enabled;
+
+	// The Group That This Collider Belongs To
+	std::string CollisionGroup;
+
+	// A List of strings that identify Collision Flags
+	std::vector<std::string> CollisionFlags;
+
+	TwBar* bar;
 };
 
 //------------------------------------------------------------------------------

@@ -1,60 +1,82 @@
-/**
-	* Author: David Wong
-	* Project: CS230 Lab 7
-	* Created: 27 Novemer 2018
-**/
+//------------------------------------------------------------------------------
+//
+// File Name:	SpriteTilemap.cpp
+// Author(s):	Jacob Holyfield
+// Project:		BetaEngine
+// Course:		CS230
+//
+// Copyright © 2018 DigiPen (USA) Corporation.
+//
+//------------------------------------------------------------------------------
 
-// Includes //
 #include "stdafx.h"
 #include "SpriteTilemap.h"
+#include "Tilemap.h"
+#include "Transform.h"
+#include <Sprite.h>
+#include <vector>
+#include <Parser.h>
+#include <ResourceManager.h>
 
-#include <Vector2D.h>			// Vector2D
-
-#include "Tilemap.h"			// Tilemap
-#include "Transform.h"			// Transform
-
-// Public Member Functions //
-SpriteTilemap::SpriteTilemap()
-	: map(nullptr)
+SpriteTilemap::SpriteTilemap() : Sprite()
 {
-
+	map = nullptr;
 }
 
-Component* SpriteTilemap::Clone() const
+Component * SpriteTilemap::Clone() const
 {
 	return new SpriteTilemap(*this);
 }
 
-void SpriteTilemap::Draw()
+void SpriteTilemap::Deserialize(Parser & parser)
 {
-	// Get the width and height of the map
-	const int mapWidth = map->GetWidth();
-	const int mapHeight = map->GetHeight();
-	// Get the dimensions of every individual tile
-	const Vector2D& spriteDimensions = transform->GetScale();
-	// Use a double loop to draw every sprite
-	for (unsigned i = 0; i < static_cast<unsigned>(mapWidth); ++i)
-	{
-		for (unsigned j = 0; j < static_cast<unsigned>(mapHeight); ++j)
-		{
-			// Get the cell's value
-			int cellValue = map->GetCellValue(i, j);
-			// If the cell value is empty, then skip because there is nothing to draw
-			if (!cellValue)
-				continue;
+	Sprite::Deserialize(parser);
 
-			// Set the frame equal to the value inside the map (this map is not the collidable one)
-			SetFrame(cellValue-1);
-			// Get the offset of the tile, where it is going to be drawn
-			Vector2D offset = Vector2D(i * spriteDimensions.x, -1 * static_cast<int>(j) * spriteDimensions.y);
-			// Finally, draw the sprite
-			Sprite::Draw(offset);
-		}
-	}
+	std::string tilemapLoc;
+	parser.ReadVariable("tilemapLoc", tilemapLoc);
+
+	SetTilemap(ResourceManager::GetInstance().GetTilemap(tilemapLoc, true, true));
 }
 
-// Mutators //
-void SpriteTilemap::SetTilemap(const Tilemap* tilemap)
+void SpriteTilemap::Serialize(Parser & parser) const
 {
-	map = tilemap;
+	Sprite::Serialize(parser);
+
+	parser.WriteVariable("tilemapLoc", map->GetName());
+
+	ResourceManager::GetInstance().SaveTilemapToFile(map);
+}
+
+void SpriteTilemap::Draw()
+{
+	int height = map->GetHeight();
+	int width = map->GetWidth();
+	Vector2D tileScale = transform->GetScale();
+
+	for (int r = 0; r < height; r++)
+	{
+		for (int c = 0; c < width; c++)
+		{
+			int cellValue = map->GetCellValue(c, r);
+
+			//skip if this cell is empty or has an error aka it is less than or equal to 0
+			if(cellValue > 0)
+			{
+				SetFrame(cellValue - 1);
+
+				Sprite::Draw(Vector2D(tileScale.x * c, tileScale.y * -r));
+			}
+		}
+	}
+
+}
+
+void SpriteTilemap::SetTilemap(Tilemap * _map)
+{
+	map = _map;
+}
+
+Tilemap * SpriteTilemap::GetTilemap()
+{
+	return map;
 }

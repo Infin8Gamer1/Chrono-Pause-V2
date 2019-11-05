@@ -1,33 +1,23 @@
-/**
-* Author: David Wong
-* Project: CS230 Project 2 (Game Object and Game Manager)
-* File Name: GameObjectManager.cpp
-* Created: 8 Nov 2018
-**/
-// Includes //
+//------------------------------------------------------------------------------
+//
+// File Name:	GameObjectManager.cpp
+// Author(s):	Jacob Holyfield
+// Project:		BetaEngine
+// Course:		CS230
+//
+// Copyright © 2018 DigiPen (USA) Corporation.
+//
+//------------------------------------------------------------------------------
+
 #include "stdafx.h"
 #include "GameObjectManager.h"
+#include "Space.h"
+#include "GameObject.h"
+#include "Collider.h"
 
-#include "Space.h"			// Space
-#include "GameObject.h"		// Game Object
-#include "Collider.h"		// Collider
-
-// Public Member Functions //
-GameObjectManager::GameObjectManager(Space* space_)
-	: BetaObject("ObjectManager"), fixedUpdateDt(1.0f/60.0f), timeAccumulator(0), numObjects(0), numArchetypes(0)
+GameObjectManager::GameObjectManager(Space * space) : BetaObject("ObjectManager", space)
 {
-	SetParent(reinterpret_cast<BetaObject*>(space_));
-	// Initialize all possible objects with nullptr
-	for (unsigned i = 0; i < maxObjects; ++i)
-	{
-		gameObjectActiveList[i] = nullptr;
-	}
-
-	// Initialize all possible archetypes with nullptr
-	for (unsigned i = 0; i < maxArchetypes; ++i)
-	{
-		gameObjectArchetypes[i] = nullptr;
-	}
+	timeAccumulator = 0.0f;
 }
 
 GameObjectManager::~GameObjectManager()
@@ -38,166 +28,203 @@ GameObjectManager::~GameObjectManager()
 
 void GameObjectManager::Update(float dt)
 {
-	// Get the space
-	Space* space = reinterpret_cast<Space*>(GetParent());
-	// If we aren't paused, then update all the active objects
-	if(!space->IsPaused())
-	{
+	if (!static_cast<Space*>(GetParent())->IsPaused()) {
 		VariableUpdate(dt);
 		FixedUpdate(dt);
-		CheckCollisions();
 	}
-
-	// Destroy any objects marked for destruction
 	DestroyObjects();
-
-	// Draw the remaining objects
 	Draw();
 }
 
-void GameObjectManager::Shutdown()
+void GameObjectManager::Shutdown(void)
 {
-	for (unsigned i = 0; i < numObjects; ++i)
+	std::vector<GameObject*>::iterator i;
+
+	for (i = gameObjectActiveList.begin(); i != gameObjectActiveList.end(); ++i)
 	{
-		delete gameObjectActiveList[i];
-		gameObjectActiveList[i] = nullptr;
+		delete (*i);
+		*i = nullptr;
 	}
 
-	numObjects = 0;
+	gameObjectActiveList.clear();
+	gameObjectActiveList.shrink_to_fit();
 }
 
-void GameObjectManager::Unload()
+void GameObjectManager::Unload(void)
 {
-	for (unsigned i = 0; i < numArchetypes; ++i)
+	std::vector<GameObject*>::iterator i;
+
+	for (i = gameObjectArchetypes.begin(); i != gameObjectArchetypes.end(); ++i)
 	{
-		delete gameObjectArchetypes[i];
-		gameObjectArchetypes[i] = nullptr;
+		delete (*i);
+		*i = nullptr;
 	}
 
-	numArchetypes = 0;
+	gameObjectArchetypes.clear();
+	gameObjectArchetypes.shrink_to_fit();
 }
 
-void GameObjectManager::AddObject(GameObject& gameObject)
+void GameObjectManager::AddObject(GameObject & _gameObject)
 {
-	// Don't add any more objects that we have space for
-	if (numObjects >= maxObjects)
-	{
-		delete &gameObject;
+	if (&_gameObject == nullptr) {
+		std::cout << "Attempted to add Null object" << std::endl;
 		return;
 	}
 
-	// Set the parent to belong on the space
-	gameObject.SetParent(GetParent());
-	// Update the number of objects we have and keep track of the new object we have
-	gameObject.Initialize();
-	gameObjectActiveList[numObjects++] = &gameObject;
+	gameObjectActiveList.push_back(&_gameObject);
+	gameObjectActiveList.back()->SetParent(GetParent());
+	gameObjectActiveList.back()->Initialize();
 }
 
-void GameObjectManager::AddArchetype(GameObject& archetype)
+void GameObjectManager::AddArchetype(GameObject & _gameObject)
 {
-	// Don't add anymore archetypes that we have space for
-	if (numArchetypes >= maxArchetypes)
-	{
-		delete &archetype;
-		return;
-	}
-
-	// Update the number of archetypes we have and keep track of the new archetype
-	gameObjectArchetypes[numArchetypes++] = &archetype;
+	gameObjectArchetypes.push_back(&_gameObject);
 }
 
-GameObject* GameObjectManager::GetObjectByName(const std::string& name_) const
+GameObject * GameObjectManager::GetObjectByName(const std::string & objectName) const
 {
-	// Find the first object with the same name
-	for (unsigned i = 0; i < numObjects; ++i)
+	for (size_t i = 0; i < gameObjectActiveList.size(); i++)
 	{
-		if (gameObjectActiveList[i]->GetName() == name_)
-		{
+		if (gameObjectActiveList[i]->GetName() == objectName) {
 			return gameObjectActiveList[i];
 		}
 	}
+	std::cout << "Couldn't find object with name of " << objectName << "." << std::endl;
 	return nullptr;
 }
 
-GameObject* GameObjectManager::GetArchetypeByName(const std::string& name_) const
+GameObject * GameObjectManager::GetArchetypeByName(const std::string & objectName) const
 {
-	// Find the first object with the same name
-	for (unsigned i = 0; i < numArchetypes; ++i)
+	for (size_t i = 0; i < gameObjectArchetypes.size(); i++)
 	{
-		if (gameObjectArchetypes[i]->GetName() == name_)
-		{
+		if (gameObjectArchetypes[i]->GetName() == objectName) {
 			return gameObjectArchetypes[i];
 		}
 	}
+
+	std::cout << "Couldn't find archetype with name of " << objectName << "." << std::endl;
 	return nullptr;
 }
 
-unsigned GameObjectManager::GetObjectCount(const std::string& name_) const
+unsigned GameObjectManager::GetObjectCount(const std::string & objectName) const
 {
-	// The number of objects we find with the same name
-	unsigned count = 0;
-	// Count the number of objects we have
-	for (unsigned i = 0; i < numObjects; ++i)
+	int output = 0;
+
+	for (size_t i = 0; i < gameObjectActiveList.size(); i++)
 	{
-		if (gameObjectActiveList[i]->GetName() == name_)
-		{
-			++count;
+		if (gameObjectActiveList[i]->GetName() == objectName && !gameObjectActiveList[i]->IsDestroyed()) {
+			output++;
 		}
 	}
-	return count;
+
+	return output;
 }
 
-// Private Member Functions
+void GameObjectManager::DestroyAllObjects()
+{
+	if (gameObjectActiveList.empty()) {
+		return;
+	}
+
+	for (size_t i = 0; i < gameObjectActiveList.size(); i++) {
+		delete gameObjectActiveList[i];
+		gameObjectActiveList[i] = nullptr;
+
+		gameObjectActiveList.erase(gameObjectActiveList.begin() + i);
+	}
+
+	gameObjectActiveList.shrink_to_fit();
+}
+
+std::vector<GameObject*> GameObjectManager::GetGameObjectActiveList()
+{
+	return gameObjectActiveList;
+}
+
+std::string GameObjectManager::GenerateUniqueGameObjectName(const std::string & name)
+{
+	std::string outputName = name;
+
+	unsigned numberToAppend = 0;
+
+	for (size_t i = 0; i < gameObjectActiveList.size(); i++)
+	{
+		std::string GOName = gameObjectActiveList[i]->GetName();
+
+		size_t pos = GOName.find_last_of("_");
+
+		std::string currentName = GOName.substr(0, pos);
+
+		if (currentName == name)
+		{
+			if (pos != std::string::npos) {
+				std::string currentNumberString = GOName.substr(pos+1);
+
+				int curNumber = std::stoi(currentNumberString);
+
+				numberToAppend = curNumber + 1;
+			}
+			else {
+				numberToAppend++;
+			}
+		}
+	}
+
+	if (numberToAppend > 0)
+	{
+		outputName = outputName + "_" + std::to_string(numberToAppend);
+	}
+
+	return outputName;
+}
+
 void GameObjectManager::VariableUpdate(float dt)
 {
-	// Update all of the objects
-	for (unsigned i = 0; i < numObjects; ++i)
+	for (size_t i = 0; i < gameObjectActiveList.size(); i++)
 	{
-		if(!gameObjectActiveList[i]->IsPaused())
-			gameObjectActiveList[i]->Update(dt);
+		gameObjectActiveList[i]->Update(dt);
 	}
 }
 
 void GameObjectManager::FixedUpdate(float dt)
 {
-	// Update all of the objects when fixedUpdateDt has passed
 	timeAccumulator += dt;
-	if (timeAccumulator < fixedUpdateDt)
-		return;
 
-	timeAccumulator -= fixedUpdateDt;
-	for (unsigned i = 0; i < numObjects; ++i)
+	if (timeAccumulator >= fixedUpdateDt)
 	{
-		if(!gameObjectActiveList[i]->IsPaused())
-		gameObjectActiveList[i]->FixedUpdate(fixedUpdateDt);
+		for (size_t i = 0; i < gameObjectActiveList.size(); i++)
+		{
+			gameObjectActiveList[i]->FixedUpdate(fixedUpdateDt);
+		}
+
+		CheckCollisions();
+
+		timeAccumulator -= fixedUpdateDt;
 	}
 }
 
 void GameObjectManager::DestroyObjects()
 {
-	// Destroy any objects marked for destruction
-	for (unsigned i = 0; i < numObjects; ++i)
-	{
-		GameObject* object = gameObjectActiveList[i];
-		if (object->IsDestroyed())
-		{
-			delete object;
-			// Update the number of objects
-			--numObjects;
+	if (gameObjectActiveList.empty()) {
+		return;
+	}
 
-			// Ok, now fill in the empty void we just created by shifting any
-			// remaining objects one to the left
-			for (unsigned j = i; j < numObjects; ++j)
-			{
-				gameObjectActiveList[j] = gameObjectActiveList[j + 1];
-			}
+	for (size_t i = 0; i < gameObjectActiveList.size(); i++) {
+		if (gameObjectActiveList[i]->IsDestroyed()) {
+			delete gameObjectActiveList[i];
+			gameObjectActiveList[i] = nullptr;
+
+			gameObjectActiveList.erase(gameObjectActiveList.begin() + i);
 		}
 	}
+
+	//gameObjectArchetypes.clear();
+	gameObjectActiveList.shrink_to_fit();
 }
 
-void GameObjectManager::Draw()
+void GameObjectManager::Draw(void)
 {
-	for (unsigned i = 0; i < numObjects; ++i)
+	for (size_t i = 0; i < gameObjectActiveList.size(); i++)
 	{
 		gameObjectActiveList[i]->Draw();
 	}
@@ -205,36 +232,23 @@ void GameObjectManager::Draw()
 
 void GameObjectManager::CheckCollisions()
 {
-	// Compare each object of the scene to every object in the scene for collisions
-	// Start the O(n^2) process to do physics
-	for (unsigned i = 0; i < numObjects; ++i)
+	for (size_t i = 0; i < gameObjectActiveList.size(); i++)
 	{
-		// Save the first object to compare against everything else
-		GameObject* firstObjectTested = gameObjectActiveList[i];
-		if (firstObjectTested->IsDestroyed())
-			continue;
-
-		Collider* colliderA = reinterpret_cast<Collider*>(firstObjectTested->GetComponent("Collider"));
-		// Only execute the collider code if the first object has a collider
-		if (colliderA)
-		{
-			for (unsigned j = 0; j < numObjects; ++j)
-			{
-				// If we found the same object comparing to iself, then skip this check
-				if (i == j)
-					continue;
-
-				GameObject* secondObjectTested = gameObjectActiveList[j];
-				if (secondObjectTested->IsDestroyed())
-					continue;
-
-				const Collider* colliderB = reinterpret_cast<const Collider*>(secondObjectTested->GetComponent("Collider"));
-				// Only execute the collider code if the second object has a collider
-				if (colliderB)
+		GameObject* go1 = gameObjectActiveList[i];
+		if (!go1->IsDestroyed()) {
+			Collider* collider1 = go1->GetComponent<Collider>();
+			if (collider1 != nullptr) {
+				for (size_t x = 0; x < gameObjectActiveList.size(); x++)
 				{
-					// Check for the collision
-					colliderA->CheckCollision(*colliderB);
+					GameObject* go2 = gameObjectActiveList[x];
+					if (!go2->IsDestroyed()) {
+						Collider* collider2 = go2->GetComponent<Collider>();
+						if (collider2 != nullptr && go1 != go2) {
+							collider1->CheckCollision(*collider2);
+						}
+					}
 				}
+				
 			}
 		}
 	}

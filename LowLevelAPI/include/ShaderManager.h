@@ -12,14 +12,18 @@
 #pragma once
 
 //------------------------------------------------------------------------------
+// Include Files:
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
 // Forward Declarations:
 //------------------------------------------------------------------------------
 
 class Vector2D;
 class Color;
-class Matrix3D;
-
-//------------------------------------------------------------------------------
+struct Matrix3D;
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -42,7 +46,7 @@ public:
 	void SetShaderVariable(const std::string& name, float value);
 	void SetShaderVariable(const std::string& name, const Vector2D& value);
 	void SetShaderVariable(const std::string& name, const Color& value);
-	void SetShaderVariable(const std::string& name, const Matrix3D& value);
+	void SetShaderVariable(const std::string& name, const Matrix3D& transform);
 
 	static ShaderManager& GetInstance();
 
@@ -53,7 +57,28 @@ public:
 	// No shader currently in use
 	static const int shaderIndexNone;
 
+	// Shader program loaded incorrectly
+	static const unsigned programIdInvalid;
+
 private:
+	//------------------------------------------------------------------------------
+	// Private Structures:
+	//------------------------------------------------------------------------------
+
+	struct ShaderProgram
+	{
+		// Functions
+		ShaderProgram(unsigned id, const std::string& vertexShader, const std::string& pixelShader);
+
+		// ShaderProgram operators
+		bool operator==(const ShaderProgram& other);
+
+		// Variables
+		unsigned id;
+		std::string vertexShader;
+		std::string pixelShader;
+	};
+
 	//------------------------------------------------------------------------------
 	// Private Functions:
 	//------------------------------------------------------------------------------
@@ -81,7 +106,7 @@ private:
 	// Private Variables:
 	//------------------------------------------------------------------------------
 
-	std::vector<unsigned> programIDs;
+	std::vector<ShaderProgram> programs;
 	int currentShaderIndex;
 
 	std::string shaderPath;
@@ -90,5 +115,6 @@ private:
 	std::vector<std::map<std::string, int>> uniformLocations;
 	std::vector<std::map<std::string, int>> attributeLocations;
 };
+
 
 //------------------------------------------------------------------------------

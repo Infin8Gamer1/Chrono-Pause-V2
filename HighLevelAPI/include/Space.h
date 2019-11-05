@@ -16,7 +16,7 @@
 //------------------------------------------------------------------------------
 
 #include "GameObjectManager.h"
-#include "BetaObject.h"
+#include <BetaObject.h>
 
 //------------------------------------------------------------------------------
 
@@ -25,6 +25,7 @@
 //------------------------------------------------------------------------------
 
 class Level;
+class Camera;
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -38,7 +39,7 @@ public:
 	//------------------------------------------------------------------------------
 
 	// Constructor(s)
-	Space(const std::string& name);
+	Space(const std::string& name, bool depth = false, bool useFirstSpaceCamera = false);
 
 	// Destructor
 	~Space();
@@ -69,11 +70,24 @@ public:
 	//   level = The next level that the space will be using.
 	void SetLevel(Level* level);
 
+	// Sets the level that the space is using after unloading the current level.
+	// Params:
+	//   level = The next level that the space will be using.
+	template<class T>
+	void SetLevel() {
+		SetLevel(new T());
+	}
+
+	Level* GetLevel();
+
 	// Restarts the current level (next level = current)
 	void RestartLevel();
 	
 	// Returns the object manager, which you can use to retrieve and add objects.
 	GameObjectManager& GetObjectManager();
+
+	// Returns the camera for the space
+	Camera* GetCamera();
 
 private:
 	//------------------------------------------------------------------------------
@@ -91,6 +105,9 @@ private:
 	Level* currentLevel;
 	Level* nextLevel;
 	GameObjectManager objectManager;
+	Camera* camera;
+	bool depth;
+	bool useFirstSpaceCamera;
 };
 
 //------------------------------------------------------------------------------

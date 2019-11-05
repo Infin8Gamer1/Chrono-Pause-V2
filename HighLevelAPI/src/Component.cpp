@@ -1,23 +1,33 @@
-/**
-* Author: David Wong
-* Project: CS230 Project 2 (Game Object and Game Manager)
-* File Name: Component.cpp
-* Created: 8 Nov 2018
-**/
+//------------------------------------------------------------------------------
+//
+// File Name:	Component.cpp
+// Author(s):	Jacob Holyfield
+// Project:		BetaEngine
+// Course:		CS230
+//
+// Copyright © 2018 DigiPen (USA) Corporation.
+//
+//------------------------------------------------------------------------------
 
-// Include //
 #include "stdafx.h"
 #include "Component.h"
+#include "GameObject.h"
 
-// Public Member Functions //
-
-Component::Component(const std::string& name_)
-	: BetaObject(name_)
+Component::Component(const std::string & name) : BetaObject(name), Serializable()
 {
-
 }
 
-GameObject* Component::GetOwner() const
+void Component::AddVarsToTweakBar(TwBar * bar)
 {
-	return reinterpret_cast<GameObject*>(GetParent());
+	UNREFERENCED_PARAMETER(bar);
+
+	/*std::string params = " label='" + GetName() + "' ";
+	
+	TwAddButton(bar, std::string("LabelButton_" + GetName()).c_str(), NULL, NULL, params.c_str());
+	TwAddSeparator(bar, std::string("Separator_" + GetName()).c_str(), NULL);*/
+}
+
+GameObject * Component::GetOwner() const
+{
+	return static_cast<GameObject*>(GetParent());
 }

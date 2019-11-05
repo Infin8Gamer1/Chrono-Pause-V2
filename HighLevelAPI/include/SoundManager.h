@@ -115,6 +115,8 @@ private:
 	// Add FX/BGM helper
 	void AddSound(const std::string& filename, FMOD_MODE mode);
 
+	void FMOD_Assert(FMOD_RESULT result);
+
 	//------------------------------------------------------------------------------
 	// Private Variables:
 	//------------------------------------------------------------------------------
@@ -129,18 +131,22 @@ private:
 	size_t numBanks;
 	FMOD::Studio::Bank* bankList[maxNumBanks];  // List of all loaded sound banks.
 
+	// Channels
 	FMOD::Channel* musicChannel;				// The channel most recently used to play music
 	FMOD::ChannelGroup* effectsChannelGroup;	// The channel group used for SFX.
 
+	// Systems
 	FMOD::System *system;						// The internal FMOD low-level system
 	FMOD::Studio::System *studioSystem;			// The internal FMOD studio system.
 
+	// Volume
 	float musicVolume;	 // The current volume of the music channel (0.0 to 1.0).
 	float effectsVolume; // The current volume of the sound effects channel group (0.0 to 1.0).
 
-	std::string audioFilePath;
-	std::string bankFilePath;
-	std::string eventPrefix;
+	// Directories
+	std::string audioFilePath; // Directory of audio assets
+	std::string bankFilePath; // Subdirectory for FMOD bank files
+	std::string eventPrefix; // All events start with "event:/"
 };
 
 //------------------------------------------------------------------------------

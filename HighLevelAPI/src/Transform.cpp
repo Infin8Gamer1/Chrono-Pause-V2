@@ -1,72 +1,176 @@
-/**
-	* Author: David Wong
-	* Description: Define the Transform component
-	* Project: CS230 Lab 5
-**/
+//------------------------------------------------------------------------------
+//
+// File Name:	Transform.cpp
+// Author(s):	Jacob Holyfield
+// Project:		BetaEngine
+// Course:		CS230
+//
+// Copyright © 2018 DigiPen (USA) Corporation.
+//
+//------------------------------------------------------------------------------
 
-// Includes //
 #include "stdafx.h"
 #include "Transform.h"
+#include <Parser.h>
+#include <sstream>
+#include <Engine.h>
+#include <SpaceManager.h>
 
-#include "Matrix2DStudent.h"			// Matrix2D
-
-
-// Public Member Functions //
-Transform::Transform(float x, float y)
-	: Component("Transform"), translation(x, y), scale(50, 50), rotation(0), isDirty(true)
+Transform::Transform(float x, float y) : Component("Transform")
 {
-	matrix = GetMatrix();
+	translation = Vector2D(x, y);
+	scale = Vector2D(50,50);
+	rotation = 0.0f;
+
+	matrix = CS230::Matrix2D();
+
+	isDirty = true;
+
+	bar = nullptr;
 }
 
-Transform::Transform(Vector2D translation, Vector2D scale, float rotation)
-	: Component("Transform"), translation(translation), scale(scale), rotation(rotation), isDirty(true)
+Transform::Transform(Vector2D _translation, Vector2D _scale, float _rotation) : Component("Transform")
 {
-	matrix = GetMatrix();
+	translation = _translation;
+	scale = _scale;
+	rotation = _rotation;
+
+	matrix = CS230::Matrix2D();
+
+	isDirty = true;
+
+	bar = nullptr;
 }
 
-Component* Transform::Clone() const
+Transform::~Transform()
+{
+	if (bar != nullptr)
+	{
+		TwRemoveVar(bar, "Position");
+		TwRemoveVar(bar, "Rotation");
+		TwRemoveVar(bar, "Scale");
+	}
+}
+
+Component * Transform::Clone() const
 {
 	return new Transform(*this);
 }
 
-const CS230::Matrix2D& Transform::GetMatrix()
+void Transform::Deserialize(Parser & parser)
 {
-	// If the transformations had changed, then re-construct the matrix
+	//get translation
+	Vector2D _translation;
+	parser.ReadVariable("translation", _translation);
+
+	SetTranslation(_translation);
+
+	//get rotation
+	float _rotation;
+	parser.ReadVariable("rotation", _rotation);
+
+	SetRotation(_rotation);
+
+	//get scale
+	Vector2D _scale;
+	parser.ReadVariable("scale", _scale);
+
+	SetScale(_scale);
+}
+
+void Transform::Serialize(Parser & parser) const
+{
+	//set translation
+	parser.WriteVariable("translation", GetTranslation());
+
+	//set rotation
+	parser.WriteVariable("rotation", GetRotation());
+
+	//set scale
+	parser.WriteVariable("scale", GetScale());
+}
+
+void Transform::AddVarsToTweakBar(TwBar * bar_)
+{
+	bar = bar_;
+
+	Component::AddVarsToTweakBar(bar);
+	std::string params = " group='" + GetName() + "' ";
+
+	TwAddVarRW(bar, "Position", Engine::GetInstance().GetModule<SpaceManager>()->GetVector2DTwType(), (void*)&translation, params.c_str());
+	TwAddVarRW(bar, "Rotation", TW_TYPE_FLOAT, &rotation, std::string(params + "precision=3 step=" + std::to_string(15.0f * M_PI / 180.0f) + " min=0 max=" + std::to_string(2*M_PI) + " ").c_str());
+	TwAddVarRW(bar, "Scale", Engine::GetInstance().GetModule<SpaceManager>()->GetVector2DTwType(), (void*)&scale, params.c_str());
+}
+
+void Transform::Update(float dt)
+{
+	UNREFERENCED_PARAMETER(dt);
+
+	if (bar != nullptr)
+	{
+		if (translation.x != previousTranslation.x || translation.y != previousTranslation.y)
+		{
+			isDirty = true;
+		}
+
+		previousTranslation = translation;
+
+		if (rotation != previousRotation)
+		{
+			isDirty = true;
+		}
+
+		previousRotation = rotation;
+
+		if (scale.x != previousScale.x || scale.y != previousScale.y)
+		{
+			isDirty = true;
+		}
+
+		previousScale = scale;
+	}	
+}
+
+const CS230::Matrix2D & Transform::GetMatrix()
+{
 	CalculateMatrices();
+
 	return matrix;
 }
 
-const CS230::Matrix2D& Transform::GetInverseMatrix()
+const CS230::Matrix2D & Transform::GetInverseMatrix()
 {
-	// Update the inverse transformation if it has changed
 	CalculateMatrices();
+
 	return inverseMatrix;
 }
 
-void Transform::CalculateMatrices()
+void Transform::SetTranslation(const Vector2D & _translation)
 {
-	// If the transformations had changed, then re-construct the matrix
-	if (isDirty)
-	{
-		matrix = CS230::Matrix2D::TranslationMatrix(translation.x, translation.y)
-			* CS230::Matrix2D::RotationMatrixRadians(rotation) * CS230::Matrix2D::ScalingMatrix(scale.x, scale.y);
+	translation = _translation;
 
-		inverseMatrix = CS230::Matrix2D::ScalingMatrix(1.0f / scale.x, 1.0f / scale.y)
-			* CS230::Matrix2D::RotationMatrixRadians(-rotation) * CS230::Matrix2D::TranslationMatrix(-translation.x, -translation.y);
-
-		isDirty = false;
-	}
+	isDirty = true;
 }
 
-// Accesors //
-const Vector2D& Transform::GetTranslation() const
+const Vector2D & Transform::GetTranslation() const
 {
 	return translation;
 }
 
-const Vector2D& Transform::GetScale() const
+void Transform::SetRotation(float _rotation)
 {
-	return scale;
+	rotation = _rotation;
+
+	isDirty = true;
+}
+
+void Transform::LookAt(Vector2D _target)
+{
+	Vector2D dif = _target - translation;
+
+	dif.Normalized();
+
+	SetRotation(atan2(dif.y, dif.x));
 }
 
 float Transform::GetRotation() const
@@ -74,30 +178,33 @@ float Transform::GetRotation() const
 	return rotation;
 }
 
-// Mutators //
-void Transform::SetTranslation(const Vector2D& translation_)
+void Transform::SetScale(const Vector2D & _scale)
 {
-	if (translation_.x == translation.x && translation_.y == translation.y)
-		return;
+	scale = _scale;
 
-	translation = translation_;
 	isDirty = true;
 }
 
-void Transform::SetScale(const Vector2D& scale_)
+const Vector2D & Transform::GetScale() const
 {
-	if (scale_.x == scale.x && scale_.y == scale.y)
-		return;
-
-	scale = scale_;
-	isDirty = true;
+	return scale;
 }
 
-void Transform::SetRotation(float rotation_)
+void Transform::CalculateMatrices()
 {
-	if (rotation_ == rotation)
-		return;
+	if (isDirty) {
+		CS230::Matrix2D translationMatrix = CS230::Matrix2D().TranslationMatrix(translation.x, translation.y);
+		CS230::Matrix2D rotationMatrix = CS230::Matrix2D().RotationMatrixRadians(rotation);
+		CS230::Matrix2D scalingMatrix = CS230::Matrix2D().ScalingMatrix(scale.x, scale.y);
 
-	rotation = rotation_;
-	isDirty = true;
+		matrix = translationMatrix * rotationMatrix * scalingMatrix;
+
+		CS230::Matrix2D inverseTranslationMatrix = CS230::Matrix2D().TranslationMatrix(-translation.x, -translation.y);
+		CS230::Matrix2D inverseRotationMatrix = CS230::Matrix2D().RotationMatrixRadians(-rotation);
+		CS230::Matrix2D inverseScalingMatrix = CS230::Matrix2D().ScalingMatrix(1 / scale.x, 1 / scale.y);
+
+		inverseMatrix = inverseScalingMatrix * inverseRotationMatrix * inverseTranslationMatrix;
+
+		isDirty = false;
+	}
 }

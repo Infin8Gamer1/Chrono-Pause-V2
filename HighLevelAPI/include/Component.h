@@ -16,6 +16,8 @@
 //------------------------------------------------------------------------------
 
 #include <BetaObject.h>
+#include <Serializable.h>
+#include <AntTweakBar.h>
 
 //------------------------------------------------------------------------------
 
@@ -31,7 +33,7 @@ class GameObject;
 
 // You are free to change the contents of this structure as long as you do not
 //   change the public interface (function prototypes) declared in the header.
-class Component : public BetaObject
+class Component : public BetaObject, public Serializable
 {
 public:
 	//------------------------------------------------------------------------------
@@ -44,8 +46,12 @@ public:
 	// Clones the component, returning a dynamically allocated copy.
 	virtual Component* Clone() const = 0;
 
+	virtual void AddVarsToTweakBar(TwBar* bar);
+
 	// Retrieve component's owner object (if any).
 	GameObject* GetOwner() const;
+
+
 };
 
 //------------------------------------------------------------------------------

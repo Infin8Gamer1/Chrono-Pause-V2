@@ -1,177 +1,177 @@
-/**
-	* Author: David Wong
-	* Created: 6 December 2018
-	* Project: CS230 Lab 8
-**/
+//------------------------------------------------------------------------------
+//
+// File Name:	SoundManager.cpp
+// Author(s):	Jacob Holyfield
+// Project:		BetaEngine
+// Course:		CS230
+//
+// Copyright © 2018 DigiPen (USA) Corporation.
+//
+//------------------------------------------------------------------------------
 
-// Includes //
 #include "stdafx.h"
 #include "SoundManager.h"
+#include <stdio.h>
+#include <fmod_errors.h>
 
-#include <fmod.h>			// Low Level System
-#include <fmod_errors.h>	// FMOD errors
-
-// Global Functions //
-void FMOD_ASSERT(FMOD_RESULT result)
+SoundManager::SoundManager() : BetaObject("SoundManager")
 {
-	if (result != FMOD_OK)
-	{
-		std::cout << "[ERROR]: " << FMOD_ErrorString(result) << std::endl;
-	}
-}
 
-// Public Member Functions //
+	// Individual sound files
+	numSounds = 0;
+	//FMOD::Sound* soundList[maxNumSounds];
 
-SoundManager::SoundManager()
-	: BetaObject("SoundManager"), musicVolume(1), effectsVolume(1), audioFilePath("Audio/"), bankFilePath("Banks/"), eventPrefix("event:/"),
-	numSounds(0), numBanks(0), musicChannel(nullptr), effectsChannelGroup(nullptr), system(nullptr), studioSystem(nullptr)
+	// Sound banks
+	numBanks = 0;
+	//FMOD::Studio::Bank* bankList[maxNumBanks];
 
-{
-	// Create the FMOD system
-	// Make sure that the system actually got created
-	FMOD_RESULT result = FMOD::Studio::System::create(&studioSystem);
-	FMOD_ASSERT(result);
+	// Systems
+	studioSystem = nullptr;			// The internal FMOD studio system.
+	FMOD_Assert(FMOD::Studio::System::create(&studioSystem)); //create studio system
+	FMOD_Assert(studioSystem->initialize(512, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, 0)); //init FMOD system
 
-	// Initialize FMOD
-	result = studioSystem->initialize(512, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, nullptr);
-	FMOD_ASSERT(result);
+	system = nullptr;	// The internal FMOD low-level system
+	FMOD_Assert(studioSystem->getLowLevelSystem(&system)); //set low level system from high level system
 
-	// Get the low level system to create the sound channel group called "SoundEffects"
-	result = studioSystem->getLowLevelSystem(&system);
-	result = system->createChannelGroup("SoundEffects", &effectsChannelGroup);
-	FMOD_ASSERT(result);
+	// Channels
+	musicChannel = nullptr;				// The channel most recently used to play music
+
+	effectsChannelGroup = nullptr;	// The channel group used for SFX.
+	FMOD_Assert(system->createChannelGroup("SoundEffects", &effectsChannelGroup));
+	
+
+	// Volume
+	musicVolume = 1.0f;	 // The current volume of the music channel (0.0 to 1.0).
+	effectsVolume = 1.0f; // The current volume of the sound effects channel group (0.0 to 1.0).
+
+	// Directories
+	audioFilePath = "Audio/"; // Directory of audio assets
+	bankFilePath = "Banks/"; // Subdirectory for FMOD bank files
+	eventPrefix = "event:/"; // All events start with "event:/"
 }
 
 SoundManager::~SoundManager()
 {
-	// Free the sound system
-	studioSystem->release();
+	FMOD_Assert(studioSystem->release());
 }
 
 void SoundManager::Update(float dt)
 {
 	UNREFERENCED_PARAMETER(dt);
-	// Literarily update the audio system
+
 	studioSystem->update();
 }
 
-void SoundManager::Shutdown()
+void SoundManager::Shutdown(void)
 {
-	// Release all the sounds in the list
-	for (unsigned i = 0; i < numSounds; ++i)
+	for (size_t i = 0; i < numSounds; i++)
 	{
-		soundList[i]->release();
+		FMOD_Assert(soundList[i]->release());
 		soundList[i] = nullptr;
 	}
 
-	// Release all of the banks in the list
-	for (unsigned i = 0; i < numBanks; ++i)
+	numSounds = 0;
+
+	for (size_t i = 0; i < numBanks; i++)
 	{
-		bankList[i]->unload();
-		soundList[i] = nullptr;
+		FMOD_Assert(bankList[i]->unload());
+		bankList[i] = nullptr;
 	}
 
 	numBanks = 0;
-	numSounds = 0;
 }
 
-void SoundManager::AddEffect(const std::string& fileName)
+void SoundManager::AddEffect(const std::string & filename)
 {
-	AddSound(fileName, FMOD_DEFAULT);
+	AddSound(filename, FMOD_DEFAULT);
 }
 
-void SoundManager::AddMusic(const std::string& fileName)
+void SoundManager::AddMusic(const std::string & filename)
 {
-	AddSound(fileName, FMOD_DEFAULT | FMOD_LOOP_NORMAL);
+	AddSound(filename, FMOD_DEFAULT | FMOD_LOOP_NORMAL);
 }
 
-void SoundManager::AddBank(const std::string& fileName)
+void SoundManager::AddBank(const std::string & filename)
 {
-	std::string fullFilePath = "Assets/" + audioFilePath + bankFilePath + fileName;
-	// Create the bank pointer
-	FMOD::Studio::Bank* newBank;
-	FMOD_RESULT result = studioSystem->loadBankFile(fullFilePath.c_str(), FMOD_DEFAULT, &newBank);
-	FMOD_ASSERT(result);
-	// Add the bank to the list
-	//	-> But first check if capped the amont of banks we can hold
-	//	-> If so, then release the new bank we made and don't add it to the list
-	if (numBanks >= maxNumBanks)
+	//make the path to the bank
+	std::string fullFilePath = "Assets/" + audioFilePath + bankFilePath + filename;
+	//create and load bank
+	FMOD::Studio::Bank *bank;
+	FMOD_Assert(studioSystem->loadBankFile(fullFilePath.c_str(), FMOD_STUDIO_LOAD_BANK_NORMAL, &bank));
+	//add bank to banks list
+	bankList[numBanks] = bank;
+	numBanks += 1;
+}
+
+FMOD::Channel * SoundManager::PlaySound(const std::string & _name)
+{
+	//Create a C-style string (character pointer) of length 100 or so.
+	char soundName[100];
+	//Create a variable to store the mode of the sound (FMOD_MODE).
+	FMOD_MODE *soundMode = new FMOD_MODE();
+
+	//Loop through all sounds in the sound list
+	for (size_t i = 0; i < numSounds; i++)
 	{
-		newBank->unload();
-		return;
-	}
-
-	if(newBank)
-		bankList[numBanks++] = newBank;
-}
-
-FMOD::Channel* SoundManager::PlaySound(const std::string& name_)
-{
-	char currentSoundName[100];
-	FMOD_MODE currentMode = FMOD_DEFAULT;
-	// Loop through all of the sounds and find the one we want to play
-	for (unsigned i = 0; i < sizeof(soundList) / sizeof(soundList[0]); ++i)
-	{
-		FMOD_RESULT result = soundList[i]->getName(currentSoundName, 100);
-		FMOD_ASSERT(result);
-		// Check whether the strings are not equal to each other, if they are not then skip interacting with the sound
-		if (strcmp(currentSoundName, name_.c_str()))
-			continue;
-
-		// If the strings are equal, then find the sound's mode
-		soundList[i]->getMode(&currentMode);
-		// Check if the sound we are played is being streamed
-		// If so, play it as a piece of music
-		if (currentMode == FMOD_CREATESTREAM)
-		{
-			// Play the music
-			return PlayMusic(soundList[i]);
-		}
-		// Otherwise, play as a regular sound effect
-		else
-		{
-			return PlayEffect(soundList[i]);
+		//Get the name of the sound from the sound object
+		FMOD_Assert(soundList[i]->getName(soundName, 100));
+		//If the name of the sound is not equal to the sound name that was passed in, skip this sound
+		if (strcmp(soundName, _name.c_str()) == 0) {
+			//get the mode of the sound object
+			FMOD_Assert(soundList[i]->getMode(soundMode));
+			//If the mode indicates it's a stream
+			if (*soundMode & FMOD_CREATESTREAM) {
+				//Return the result of using the PlayMusic helper function with that sound object
+				delete soundMode;
+				soundMode = nullptr;
+				return PlayMusic(soundList[i]);
+			} else {
+				//Return the result of using the PlayEffect helper function with that sound object.
+				delete soundMode;
+				soundMode = nullptr;
+				return PlayEffect(soundList[i]);
+			}
 		}
 	}
 
-	// At this point, we couldn't find a channel with an equivalent sound object
+	
+	
+	//If no sound with that name was found, return nullptr.
+	std::cout << "Couldn't find sound to play with name : " + _name;
 	return nullptr;
 }
 
-FMOD::Studio::EventInstance* SoundManager::PlayEvent(const std::string& name_)
+FMOD::Studio::EventInstance * SoundManager::PlayEvent(const std::string & _name)
 {
-	// Create the full event name
-	std::string fullEventName = eventPrefix + name_;
-	FMOD::Studio::EventDescription* eventDesc = nullptr;
-	FMOD::Studio::EventInstance* eventInstance = nullptr;
-	// Create the event's description
-	FMOD_RESULT result = studioSystem->getEvent(fullEventName.c_str(), &eventDesc);
-	FMOD_ASSERT(result);
-	// Create the actual event
-	result = eventDesc->createInstance(&eventInstance);
-	FMOD_ASSERT(result);
-	// Start the instance.
-	result = eventInstance->start();
-	FMOD_ASSERT(result);
+	//Create a string that contains the full event name (eventPrefix + eventName)
+	std::string eventPath = eventPrefix + _name;
+
+	//Create pointer variables for an FMOD::Studio::EventDescription and an FMOD::Studio::EventInstance
+	FMOD::Studio::EventDescription *eventDescription;
+	FMOD::Studio::EventInstance *eventInstance;
+
+	//Get an event with the given name from the studio system
+	FMOD_Assert(studioSystem->getEvent(eventPath.c_str(), &eventDescription));
+	//Create an instance of that event using the event description
+	FMOD_Assert(eventDescription->createInstance(&eventInstance));
+	//Start the instance
+	eventInstance->start();
+	//Release the instance (this doesn't release it immediately; it waits until the event is finished to destroy it)
 	eventInstance->release();
-	FMOD_ASSERT(result);
-	// Return the instance
+	//Return the instance so that it can be modified later
 	return eventInstance;
 }
 
 void SoundManager::SetMusicVolume(float volume)
 {
-	// Set the music volume
 	musicVolume = volume;
 }
 
 void SoundManager::SetEffectsVolume(float volume)
 {
-	// Set the sound effects volume
 	effectsVolume = volume;
 }
 
-// Accessors //
 float SoundManager::GetMusicVolume() const
 {
 	return musicVolume;
@@ -182,49 +182,56 @@ float SoundManager::GetEffectsVolume() const
 	return effectsVolume;
 }
 
-// Private Member Functions //
-FMOD::Channel* SoundManager::PlayEffect(FMOD::Sound* sound) const
+//------------------------------------------------------------------------------
+// Private Functions:
+//------------------------------------------------------------------------------
+
+FMOD::Channel * SoundManager::PlayEffect(FMOD::Sound * sound) const
 {
-	// Create the actual FMOD channel
-	FMOD::Channel* channel = nullptr;
-	// Play the sound in the channel
-	FMOD_RESULT result = system->playSound(sound, effectsChannelGroup, false, &channel);
-	FMOD_ASSERT(result);
-	// Return the channel
+	//Create an FMOD::Channel pointer
+	FMOD::Channel *channel;
+	//Use the low - level system to play a sound using the effects channel group
+	system->playSound(sound, effectsChannelGroup, false, &channel);
+	//Return the channel that was used so it can be modified later if needed
 	return channel;
 }
 
-FMOD::Channel* SoundManager::PlayMusic(FMOD::Sound* sound)
+FMOD::Channel * SoundManager::PlayMusic(FMOD::Sound * sound)
 {
-	// Check that the music channel exists first
-	if (musicChannel != nullptr)
-	{
-		// Then stop all music playing on that channel
+	//If the music channel exists(isn't null), stop whatever sound is currently playing on that channel
+	if (musicChannel != nullptr) {
 		musicChannel->stop();
-		FMOD_RESULT result = system->playSound(sound, NULL, false, &musicChannel);
-		FMOD_ASSERT(result);
 	}
-
-	// Return the music channel
+	//get the music chanel group
+	FMOD::ChannelGroup *musicChanelGroup;
+	musicChannel->getChannelGroup(&musicChanelGroup);
+	//Use the low - level system to play a sound using the music channel
+	FMOD_Assert(system->playSound(sound, musicChanelGroup, false, &musicChannel));
+	//Return the music channel so it can be modified later if needed
 	return musicChannel;
 }
 
-void SoundManager::AddSound(const std::string& fileName, FMOD_MODE mode)
+void SoundManager::AddSound(const std::string & filename, FMOD_MODE mode)
 {
-	// Create the full path to a sound file
-	std::string fullPathFile = "Assets/" + audioFilePath + fileName;
-	// Create the sound
-	FMOD::Sound* sound = nullptr;
-	FMOD_RESULT result = system->createSound(fullPathFile.c_str(), mode, nullptr, &sound);
-	FMOD_ASSERT(result);
-	// If we don't have any more space for sounds, then ignore this new one we created
-	if (numSounds >= maxNumSounds)
+	//Create a string that contains the full file path(Assets / +audioFilePath + filename)
+	std::string filePath;
+	filePath.append("Assets/").append(audioFilePath).append(filename);
+
+	//Create an FMOD::Sound pointer variable
+	FMOD::Sound *sound;
+	//Use the low - level system to create a sound using the given path and mode
+	FMOD_Assert(system->createSound(filePath.c_str(), mode, nullptr, &sound));
+
+	//Put the sound in the sound list at the next available index
+	soundList[numSounds] = sound;
+	//Increase the number of sounds
+	numSounds += 1;
+}
+
+void SoundManager::FMOD_Assert(FMOD_RESULT result)
+{
+	if (result != FMOD_OK)
 	{
-		result = sound->release();
-		FMOD_ASSERT(result);
-		return;
+		std::cout << "FMOD error! (" << result << ") " << FMOD_ErrorString(result) << std::endl;
 	}
-	// Put the sound in the sound bank if it exists
-	if (sound)
-		soundList[numSounds++] = sound;
 }

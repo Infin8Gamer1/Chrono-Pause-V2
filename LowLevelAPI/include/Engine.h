@@ -77,6 +77,9 @@ public:
 	//      objects, shaders, and sound files should be placed in subdirectories within this directory.
 	void SetFilePath(const std::string& directory = "Assets/");
 
+	// Set whether pressing the escape key will close the program.
+	void SetCloseOnEscape(bool closeOnEscape);
+
 	// Returns the single instance of the Engine class
 	static Engine& GetInstance();
 
@@ -116,6 +119,9 @@ private:
 
 	// Assets directory
 	std::string assetsPath;
+
+	// Should the program stop when escape is pressed?
+	bool closeOnEscape;
 };
 
 /*----------------------------------------------------------------------------*/

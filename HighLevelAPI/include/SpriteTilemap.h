@@ -24,6 +24,7 @@
 //------------------------------------------------------------------------------
 
 class Tilemap;
+class Parser;
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -44,13 +45,21 @@ public:
 	// Clone the sprite, returning a dynamically allocated copy.
 	Component* Clone() const override;
 
+	// Loads object data from a file.
+	void Deserialize(Parser& parser) override;
+
+	// Saves object data to a file.
+	void Serialize(Parser& parser) const override;
+
 	// Draw a sprite (Sprite can be textured or untextured).
 	void Draw() override;
 
 	// Sets the tilemap data that will be used by the sprite.
 	// Params:
 	//   map = A pointer to the tilemap resource.
-	void SetTilemap(const Tilemap* map);
+	void SetTilemap(Tilemap* map);
+
+	Tilemap* GetTilemap();
 
 private:
 	//------------------------------------------------------------------------------
@@ -58,7 +67,7 @@ private:
 	//------------------------------------------------------------------------------
 
 	// The tilemap
-	const Tilemap* map;
+	Tilemap* map;
 };
 
 //------------------------------------------------------------------------------

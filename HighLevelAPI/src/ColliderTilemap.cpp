@@ -1,317 +1,307 @@
-/**
-	* Author: David Wong
-	* Project: CS230 Lab 7
-	* Created: 27 November 2018
-**/
+//------------------------------------------------------------------------------
+//
+// File Name:	ColliderTilemap.cpp
+// Author(s):	Jacob Holyfield
+// Project:		BetaEngine
+// Course:		CS230
+//
+// Copyright © 2018 DigiPen (USA) Corporation.
+//
+//------------------------------------------------------------------------------
 
-// Includes //
 #include "stdafx.h"
 #include "ColliderTilemap.h"
+#include "Transform.h"
+#include "Physics.h"
+#include "GameObject.h"
+#include "ColliderRectangle.h"
+#include <Shapes2D.h>
+#include "Matrix2DStudent.h"
+#include "Tilemap.h"
+#include <ResourceManager.h>
+#include <Parser.h>
 
-#include <DebugDraw.h>				// Debug Draw
-#include <Graphics.h>				// Graphics
-
-#include "GameObject.h"				// Game Object
-#include "Tilemap.h"				// Tilemap
-#include "ColliderRectangle.h"		// Collider Rectangle
-#include "Transform.h"				// Transform
-#include "Physics.h"				// Physics
-#include <Space.h>
-
-// Public Member Functions //
-ColliderTilemap::ColliderTilemap()
-	: Collider(ColliderType::ColliderTypeTilemap), map(nullptr)
+ColliderTilemap::ColliderTilemap() : Collider(ColliderType::ColliderTypeTilemap)
 {
-
+	map = nullptr;
 }
 
-Component* ColliderTilemap::Clone() const
+Component * ColliderTilemap::Clone() const
 {
 	return new ColliderTilemap(*this);
 }
 
+void ColliderTilemap::Deserialize(Parser & parser)
+{
+	BaseDeserialize(parser);
+
+	std::string tilemapLoc;
+	parser.ReadVariable("tilemapLoc", tilemapLoc);
+
+	SetTilemap(ResourceManager::GetInstance().GetTilemap(tilemapLoc, true));
+}
+
+void ColliderTilemap::Serialize(Parser & parser) const
+{
+	BaseSerialize(parser);
+
+	parser.WriteVariable("tilemapLoc", map->GetName());
+
+	ResourceManager::GetInstance().SaveTilemapToFile(map);
+}
+
 void ColliderTilemap::Draw()
 {
-	// Ignore this debug draw stage if the map doesn't exist
-	if (!map)
-		return;
-	// Do a debug draw of every tile map collider we have
-	DebugDraw& debugDraw = DebugDraw::GetInstance();
-	Graphics& graphics = Graphics::GetInstance();
-	// Map width and height
-	int mapWidth = map->GetWidth();
-	int mapHeight = map->GetHeight();
-	// Tile map dimensions
-	const Vector2D& tileDimensions = transform->GetScale();
-	// Draw a rectangle for every tile we have on collision
-	for (unsigned i = 0; i < static_cast<unsigned>(mapWidth); ++i)
-	{
-		for (int j = 0; j < mapHeight; ++j)
-		{
-			Vector2D center = Vector2D(i * tileDimensions.x + tileDimensions.x/2.0f, -j * tileDimensions.y + tileDimensions.y/2.0f);
-			center += transform->GetTranslation();
-			debugDraw.AddRectangle(center, tileDimensions, graphics.GetCurrentCamera(), Colors::Green);
-		}
-	}
+	//TODO::DebugDraw
 }
 
-bool ColliderTilemap::IsCollidingWith(const Collider& collider) const
+bool ColliderTilemap::IsCollidingWith(const Collider & other) const
 {
-	Transform* otherTransform = static_cast<Transform*>(collider.GetOwner()->GetComponent("Transform"));
-	switch (collider.GetType())
-	{
-	case ColliderType::ColliderTypeRectangle:
-		{
-			const ColliderRectangle& otherColider = reinterpret_cast<const ColliderRectangle&>(collider);
-			BoundingRectangle otherRectangle = BoundingRectangle(otherTransform->GetTranslation() + otherColider.GetOffset(), otherColider.GetExtents());
-			// Get the rigid body of the other collider
-			Physics* rigidBody = reinterpret_cast<Physics*>(collider.GetOwner()->GetComponent("Physics"));
-			MapCollision collisions(false, false, false, false);
-			// Whether the other object is colliding with the object
-			bool colliding = false;
-			for (unsigned i = 0; i < RectangleSide::SideCount; ++i)
-			{
-				// Check every side of the rectangle to see if it is colliding
-				RectangleSide currentSide = static_cast<RectangleSide>(i);
-				bool result = IsSideColliding(otherRectangle, currentSide);
-				if (result)
-				{
-					colliding = true;
-				}
-				// Inform the map collisions whichs side did collide
-				*(reinterpret_cast<bool*>(&collisions) + i) = result;
-			}
-			if (colliding)
-			{
-				MapCollisionEventHandler colliderHandler = collider.GetMapCollisionHandler();
-				if (colliderHandler)
-				{
-					colliderHandler(*collider.GetOwner(), collisions);
-				}
-				if (rigidBody)
-				{
-					ResolveCollisions(otherRectangle, otherTransform, rigidBody, collisions);
-				}
-			}
-			return colliding;
+	//get components
+	Transform* otherTransform = other.GetOwner()->GetComponent<Transform>();;
+	Physics* otherPhysics = other.GetOwner()->GetComponent<Physics>();;
+
+	//check if it is a rectangle if it isn't then just return false and don't bother doing anything
+	if (other.GetType() != ColliderType::ColliderTypeRectangle || otherPhysics == nullptr) {
+		return false;
+	}
+	
+	//create a bounding box for the other object
+	BoundingRectangle otherRect = BoundingRectangle(otherTransform->GetTranslation(), static_cast<const ColliderRectangle&>(other).GetExtents());
+
+	//check collision sides and store it in a MapCollision var
+	bool bottom = IsSideColliding(otherRect, RectangleSide::SideBottom);
+	bool left = IsSideColliding(otherRect, RectangleSide::SideLeft);
+	bool right = IsSideColliding(otherRect, RectangleSide::SideRight);
+	bool top = IsSideColliding(otherRect, RectangleSide::SideTop);
+	MapCollision mapCollision = MapCollision(bottom, top, left, right);
+
+	//Resolve Collisions
+	ResolveCollisions(otherRect, otherTransform, otherPhysics, mapCollision);
+
+	if (mapCollision.bottom || mapCollision.left || mapCollision.right || mapCollision.top) {
+		if (other.GetMapCollisionHandler() != nullptr) {
+			//call collision handler for the other object
+			other.GetMapCollisionHandler()(*other.GetOwner(), mapCollision);
 		}
-	default:
-		break;
+		//we collided so return true
+		return true;
 	}
 
+	//we didn't collide so return false
 	return false;
 }
 
-bool ColliderTilemap::IsSideColliding(const BoundingRectangle& rectangle, RectangleSide side) const
+void ColliderTilemap::SetTilemap(Tilemap * _map)
 {
-	// Define the max amount of hotspots we got
-#define MAX_HOTSPOTS 3
-	// Create the hotspots
-	Vector2D hotspotStep;
-	Vector2D corner;
-	// Visualize the collision points
-	static DebugDraw& debugDraw(DebugDraw::GetInstance());
-	static Graphics& graphics(Graphics::GetInstance());
-	// See how many hotspots we are going to create
-	Vector2D direction;
-	switch (side)
-	{
-	case RectangleSide::SideBottom:
-		direction = Vector2D(0, -1);
-		break;
-	case RectangleSide::SideTop:
-		direction = Vector2D(0, 1);
-		break;
-	case RectangleSide::SideRight:
-		direction = Vector2D(1, 0);
-		break;
-	case RectangleSide::SideLeft:
-		direction = Vector2D(-1, 0);
-		break;
-	}
-	int numHotspots = static_cast<int>(MAX_HOTSPOTS);
-	// If there are no hotspots, then return early from the function
-	if (numHotspots <= 0)
-		numHotspots = 1;
+	map = _map;
+}
 
-	// Create a hotspot step that goes in a direction parallel to the side we are checking for
-	switch (side)
-	{
-	case RectangleSide::SideBottom:
-		hotspotStep = Vector2D(2.0f * rectangle.extents.x, 0);
-		corner = Vector2D(-1.0f * rectangle.extents.x, -1.0f * rectangle.extents.y) + rectangle.center;
-		break;
-	case RectangleSide::SideTop:
-		hotspotStep = Vector2D(2.0f * rectangle.extents.x, 0);
-		corner = Vector2D(-1.0f * rectangle.extents.x, rectangle.extents.y) + rectangle.center;
-		break;
+Tilemap * ColliderTilemap::GetTilemap()
+{
+	return map;
+}
 
-	case RectangleSide::SideRight:
-		hotspotStep = Vector2D(0, 2.0f * rectangle.extents.y);
-		corner = Vector2D(rectangle.extents.x, -1.0f * rectangle.extents.y) + rectangle.center;
-		break;
-	case RectangleSide::SideLeft:
-		hotspotStep = Vector2D(0, 2.0f * rectangle.extents.y);
-		corner = Vector2D(-1.0f * rectangle.extents.x, -1.0f * rectangle.extents.y) + rectangle.center;
-		break;
+bool ColliderTilemap::IsSideColliding(const BoundingRectangle & rectangle, RectangleSide side) const
+{
+	bool isCollidingOnSide = false;
+	Vector2D hotspots[3];
+
+	float offset = 1.25f;
+
+	if (side == RectangleSide::SideBottom) {
+		//create 3 hotspots Left, Middle, Right
+		hotspots[0] = Vector2D((rectangle.center.x + rectangle.extents.x / offset), rectangle.bottom);
+		hotspots[1] = Vector2D(rectangle.center.x, rectangle.bottom);
+		hotspots[2] = Vector2D((rectangle.center.x - rectangle.extents.x / offset), rectangle.bottom);
+	} else if (side == RectangleSide::SideTop) {
+		//create 3 hotspots Left, Middle, Right
+		hotspots[0] = Vector2D((rectangle.center.x + rectangle.extents.x / offset), rectangle.top);
+		hotspots[1] = Vector2D(rectangle.center.x, rectangle.top);
+		hotspots[2] = Vector2D((rectangle.center.x - rectangle.extents.x / offset), rectangle.top);
+	} else if (side == RectangleSide::SideLeft) {
+		//create 3 hotspots Top, Middle, Bottom
+		hotspots[0] = Vector2D(rectangle.left, (rectangle.center.y + rectangle.extents.y / offset));
+		hotspots[1] = Vector2D(rectangle.left, rectangle.center.y);
+		hotspots[2] = Vector2D(rectangle.left, (rectangle.center.y - rectangle.extents.y / offset));
+	} else if (side == RectangleSide::SideRight) {
+		//create 3 hotspots Top, Middle, Bottom
+		hotspots[0] = Vector2D(rectangle.right, (rectangle.center.y + rectangle.extents.y / offset));
+		hotspots[1] = Vector2D(rectangle.right, rectangle.center.y);
+		hotspots[2] = Vector2D(rectangle.right, (rectangle.center.y - rectangle.extents.y / offset));
 	}
 
-	// After defining all of that set up, create the hotspots and testing for each one
-	for (unsigned i = 0; i < static_cast<unsigned>(numHotspots); ++i)
+	//for each hotspot check if it is colliding
+	for (int i = 0; i < 3; i++)
 	{
-		corner += (hotspotStep / static_cast<float>(numHotspots+1));
-		bool result = IsCollidingAtPosition(corner.x, corner.y);
-		// Return whether the collision happened if did happen,
-		// if not, then wait until another one does happen
-		debugDraw.AddCircle(corner, 5.f, graphics.GetCurrentCamera(), result ? Colors::Red : Colors::Green);
-		if (result)
-			return true;
+		//if we are colliding at the point then set isCollidingOnSide to true
+		if (IsCollidingAtPosition(hotspots[i].x, hotspots[i].y)) {
+			isCollidingOnSide = true;
+		}
 	}
-	// If no collisions happened, then return false
-	return false;
+
+	return isCollidingOnSide;
 }
 
 bool ColliderTilemap::IsCollidingAtPosition(float x, float y) const
 {
-	// Create the normalized tile coordinate
-	Vector2D normalizedTileCoord = transform->GetInverseMatrix() * (Vector2D(x, y));
-	// Find the index of the tile we are in
-	int xIndex = static_cast<int>(normalizedTileCoord.x + 0.5f);
-	int yIndex = static_cast<int>(-normalizedTileCoord.y + 0.5f);
-	//std::cout << "Current Index: (" << xIndex << ", " << yIndex << ")" << std::endl;
-	// If the indices are outside the boundaries of our tilemap, then ignore the rest of the collision code
-	if (xIndex >= 0 && xIndex < static_cast<int>(map->GetWidth()) && yIndex >= 0 && yIndex < static_cast<int>(map->GetHeight()))
-	{
-		int cellValue = map->GetCellValue(xIndex, yIndex);
-		return cellValue;
-	}
+	//create a point in the normalized gridsystem that is the Tilemap
+	Vector2D point = Vector2D(x , y);
+	point = transform->GetInverseMatrix() * point;
 
-	return false;
+	int x2 = static_cast<int>(point.x + 0.5f);
+	int y2 = static_cast<int>(-point.y + 0.5f);
+
+	int cellValue = map->GetCellValue(x2, y2);
+
+	return (cellValue > 0);
 }
 
-void ColliderTilemap::ResolveCollisions(const BoundingRectangle& objectRectangle, Transform* objectTransform,
-	Physics* objectPhysics, const MapCollision& collisions) const
-{
-	// Calculate collision resolution adjustment on tilemap location and tile size
-	Vector2D mapTranslation = transform->GetTranslation();
-	Vector2D tileScale = transform->GetScale();
-	float nextTileCenter = 0.0f;
-	// How far we need to move the object out of the tilemap
-	float nudgeAmount = 0.0f;
-	// Velocity and Translation
-	Vector2D objectTranslation = objectTransform->GetTranslation();
-	Vector2D objectVelocity = objectPhysics->GetVelocity();
+// Move an object and set its velocity based on where it collided with the tilemap.
+// Params:
+//   objectRectangle = A bounding rectangle that encompasses the object.
+//   objectTransform = Pointer to the object's transform component.
+//   objectPhysics = Pointer to the object's physics component.
+//   collisions = True/false values from map collision checks.
+void ColliderTilemap::ResolveCollisions(const BoundingRectangle & objectRectangle, Transform * objectTransform, Physics * objectPhysics, const MapCollision & collisions) const
+{	
+	// Get the translation and velocity from the object and store them in variables
+	Vector2D translation = objectTransform->GetTranslation();
+	Vector2D velocity = objectPhysics->GetVelocity();
 
+	// We need to determine how much to move the object
+	float nudgeAmount;
+	// We will do this by finding the center of the next tile, 
+	// then finding the distance from the corresponding side to that position
+	float nextTileCenter;
+
+	//if the object is colliding on the bottom or top
 	if (collisions.bottom || collisions.top)
 	{
+		//if the object is colliding on the bottom
 		if (collisions.bottom)
 		{
-			// Find the tile on the bottom of where we are right now
-			nextTileCenter = GetNextTileCenter(RectangleSide::SideBottom, objectRectangle.bottom);
-			// Describe the nudge amount
+			// Find tile above the object's bottom side
+			nextTileCenter = GetNextTileCenter(SideBottom, objectRectangle.bottom);
+			// Find distance to next tile center
 			nudgeAmount = nextTileCenter - objectRectangle.bottom;
 		}
 		else
 		{
-			// Do the same for the top
-			nextTileCenter = GetNextTileCenter(RectangleSide::SideTop, objectRectangle.top);
+			// Find tile below object's top side
+			nextTileCenter = GetNextTileCenter(SideTop, objectRectangle.top);
+			// Find distance to next tile center
 			nudgeAmount = nextTileCenter - objectRectangle.top;
 		}
-		// If it is the bottom or the top of the collider, snap the rectangle collider and change the y velocity
-		objectTranslation.y += nudgeAmount;
-		objectVelocity.y = 0;
+		
+		// Nudge object up/down
+		translation.y += nudgeAmount;
+		// Stop velocity in y direction
+		velocity.y = 0;
 	}
-	
-	if (collisions.right || collisions.left)
+
+	//if the object is colliding on the left or right
+	if(collisions.left || collisions.right)
 	{
-		if (collisions.right)
-		{
-			nextTileCenter = GetNextTileCenter(RectangleSide::SideRight, objectRectangle.right);
+		//if the object is colliding on the left
+		if (collisions.left) {
+			// Find tile to the right the object's left side
+			nextTileCenter = GetNextTileCenter(SideLeft, objectRectangle.left);
+			// Find distance to next tile center
+			nudgeAmount = nextTileCenter - objectRectangle.left;
+		} else {
+			// Find tile to the left the object's right side
+			nextTileCenter = GetNextTileCenter(SideRight, objectRectangle.right);
+			// Find distance to next tile center
 			nudgeAmount = nextTileCenter - objectRectangle.right;
 		}
-		else
-		{
-			nextTileCenter = GetNextTileCenter(RectangleSide::SideLeft, objectRectangle.left);
-			nudgeAmount = nextTileCenter - objectRectangle.left;
-		}
 
-		// If it is the right or left of the collider, snap the rectangle collider and change the x velocity
-		objectTranslation.x += nudgeAmount;
-		objectVelocity.x = 0;
+		// Nudge object left/right
+		translation.x += nudgeAmount;
+		// Stop velocity in x direction
+		velocity.x = 0;
 	}
 
-	objectTransform->SetTranslation(objectTranslation);
-	objectPhysics->SetVelocity(objectVelocity);
+	// Modify object's actual translation and velocity
+	objectTransform->SetTranslation(translation);
+	objectPhysics->SetVelocity(velocity);
 }
 
+
+// Find the center of the closest tile on the x-axis or y-axis.
+// Used for assisting in collision resolution on a particular side.
+// Params:
+//   side = Which side the collision is occurring on.
+//   sidePosition = The x or y value of that side.
+//   point = the objects position
+// Returns:
+//   The center of the closest tile to the given position on the given side.
 float ColliderTilemap::GetNextTileCenter(RectangleSide side, float sidePosition) const
 {
-	// The point in space that is colliding
-	Vector2D position;
-	// The specific part of the center of the tile we care about
-	float* center = &position.x;
+	Vector2D point;
 
-	// If we are dealing with the top or bottom
-	if (side == RectangleSide::SideTop || side == RectangleSide::SideBottom)
+	// Create a pointer/reference variable to store the result
+	float* result;
+
+	//if the object is colliding on the bottom or top
+	if(side == SideBottom || side == SideTop)
 	{
-		position = Vector2D(0, sidePosition);
-		center = &position.y;
+		// Use the given position for the y-axis
+		// Since we only care about one axis, the other will be 0
+		point.y = sidePosition;
+		// Remember which part we want to modify
+		result = &point.y;
+	} else {
+		// Use the given position for the x-axis
+		// Since we only care about one axis, the other will be 0
+		point.x = sidePosition;
+		// Remember which part we want to modify
+		result = &point.x;
 	}
-	else
-	{
-		position = Vector2D(sidePosition, 0);
-		//center = &position.x;
-	}
-
-	// Transform the point into tilemap space
-	position = transform->GetInverseMatrix() * position;
-	// Flip the Y-Axis
-	position.y *= -1;
-	// Move into the middle of the cell
-	position += Vector2D(0.5f, 0.5f);
-	// Find the tile next ot this one
-	if (side == RectangleSide::SideLeft || side == RectangleSide::SideTop)
-	{
-		*center = ceilf(*center);
-	}
-	else
-	{
-		*center = floorf(*center);
-	}
-
-	// Re-adjust the position to be in world space
-	position -= Vector2D(0.5f, 0.5f);
-	position.y *= -1;
-	position = transform->GetMatrix() * position;
-	// Return how far away we are from the next tile
-	return *center;
-}
-
-// Mutators //
-void ColliderTilemap::SetTilemap(const Tilemap* tileMap)
-{
-	map = tileMap;
-}
-
-Vector2D ColliderTilemap::ConvertWorldCordsToTileMapCords(Vector2D inputCords, Space* space)
-{
-	ColliderTilemap* me = static_cast<ColliderTilemap*>(space->GetObjectManager().GetObjectByName("Tilemap")->GetComponent("Collider"));
 
 	// Transform the world space point into tile space
-	Vector2D point = me->transform->GetInverseMatrix() * inputCords;
+	point = transform->GetInverseMatrix() * point;
 	// Flip the y-axis
 	point.y = -point.y;
 	// Move completely into cell
 	point += Vector2D(0.5, 0.5);
 
-	return point;
+	// Find the next tile index (higher or lower depending on the side)
+	//if the object is colliding on the left or top
+	if (side == SideLeft || side == SideTop) {
+		*result = ceil(*result);
+	} else {
+		*result = floor(*result);
+	}
+
+	// Re-adjust object position
+	point -= Vector2D(0.5, 0.5);
+	// Flip the y-axis
+	point.y = -point.y;
+	// Transform point back into world space
+	point = transform->GetMatrix() * point;
+
+	return *result;
 }
 
-Vector2D ColliderTilemap::ConvertTileMapCordsToWorldCords(Vector2D inputCords, Space* space) {
-	ColliderTilemap* me = static_cast<ColliderTilemap*>(space->GetObjectManager().GetObjectByName("Tilemap")->GetComponent("Collider"));
+Vector2D ColliderTilemap::ConvertTileMapCordsToWorldCords(Vector2D inputCords) {
+	Vector2D Output = Vector2D(inputCords.x, -inputCords.y);
+	Output = transform->GetMatrix() * Output;
 
-	Vector2D Output = Vector2D(inputCords.x, inputCords.y * -1);
-	Output = me->transform->GetMatrix() * Output;
+	return Vector2D(Output.x + 0.5f, Output.y + 0.5f);
+}
 
-	return Vector2D(Output.x, Output.y);
+Vector2D ColliderTilemap::ConvertWorldCordsToTileMapCords(Vector2D inputCords)
+{
+	// Transform the world space point into tile space
+	Vector2D point = transform->GetInverseMatrix() * inputCords;
+	// Flip the y-axis
+	point.y = -point.y;
+	// Move completely into cell
+	point += Vector2D(0.5, 0.5);
+
+	point.x = floor(point.x);
+	point.y = floor(point.y);
+
+	return point;
 }

@@ -1,0 +1,23 @@
+TileMap
+{
+  numComponents : 3
+  Transform
+  {
+    translation : { -300, 400 }
+    rotation : 0
+    scale : { 50, 50 }
+  }
+  SpriteTilemap
+  {
+    frameIndex : 4
+    color : { 1 , 1 , 1 , 1 }
+    spriteSourceName : TileMap
+    tilemapLoc : Default
+  }
+  ColliderTilemap
+  {
+    CollisionGroup : default
+    CollisionFlags : all
+    tilemapLoc : Default
+  }
+}

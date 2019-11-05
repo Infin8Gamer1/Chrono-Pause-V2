@@ -47,8 +47,29 @@ public:
 	//   rotation	 = Rotation of the object about the z-axis.
 	Transform(Vector2D translation = Vector2D(), Vector2D scale = Vector2D(1,1), float rotation = 0);
 
+	~Transform();
+
 	// Clone the transform, returning a dynamically allocated copy.
 	Component* Clone() const override;
+
+	/*!
+	 * Loads object data from a file.
+	 * 
+	 * \param parser
+	 */
+	void Deserialize(Parser& parser) override;
+
+	/*!
+	 * Saves Object data to a file.
+	 * 
+	 * \param parser
+	 */
+	void Serialize(Parser& parser) const override;
+
+	// Add Component Spific Vars to a Tweak Bar
+	void AddVarsToTweakBar(TwBar* bar) override;
+
+	void Update(float dt) override;
 
 	// Get the transform matrix, based upon translation, rotation and scale settings.
 	// Returns:
@@ -74,6 +95,11 @@ public:
 	// Params:
 	//	 rotation = The rotation value (in radians).
 	void SetRotation(float rotation);
+
+	// Set the rotation of a transform component. So that it points twords the target
+	// Params:
+	//   target = the position of the target to look at.
+	void LookAt(Vector2D target);
 
 	// Get the rotation value of a transform component.
 	// Returns:
@@ -104,13 +130,19 @@ private:
 	//------------------------------------------------------------------------------
 
 	// The translation (or world position) of a game object.
-	Vector2D	translation;
+	Vector2D translation;
+	// The Previous Translation of the game object. (only gets updated if there is a TwBar)
+	Vector2D previousTranslation;
 
 	// The rotation (or orientation) of a game object.
-	float	rotation;
+	float rotation;
+	// The previous rotation of the game object. (only gets updated if there is a TwBar)
+	float previousRotation;
 
 	// The scale (or size) of a game object.
-	Vector2D	scale;
+	Vector2D scale;
+	// The previous Scale of the game object. (only gets updated if there is a TwBar)
+	Vector2D previousScale;
 
 	// The transformation matrix resulting from multiplying the 
 	// translation, rotation, and scale matrices.
@@ -118,7 +150,9 @@ private:
 	CS230::Matrix2D inverseMatrix;
 
 	// True if the transformation matrix needs to be recalculated.
-	bool	isDirty;
+	bool isDirty;
+
+	TwBar* bar;
 };
 
 //------------------------------------------------------------------------------

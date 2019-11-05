@@ -1,124 +1,138 @@
-/**
-	* Author: David Wong
-	* Description: Create the Matrix2D object
-	* Project: CS230 Lab 5
-**/
+//------------------------------------------------------------------------------
+//
+// File Name:	Matrix2DStudent.cpp
+// Author(s):	Jacob Holyfield
+// Project:		BetaEngine
+// Course:		CS230
+//
+// Copyright © 2018 DigiPen (USA) Corporation.
+//
+//------------------------------------------------------------------------------
 
-// Includes //
 #include "stdafx.h"
 #include "Matrix2DStudent.h"
 
-#include <Vector2D.h>				// Vector2D //
+namespace CS230 {
 
-namespace CS230
-{
-	// Private Member Functions //
-	float Matrix2D::RowColumnMultiply(const Matrix2D& other, unsigned row, unsigned column) const
-	{
-		// Find the dot product of the vectors within this and the other matrix
-		return m[row][0] * other.m[0][column] + m[row][1] * other.m[1][column] + m[row][2] * other.m[2][column];
-	}
-
-	// Public Member Functions //
 	Matrix2D::Matrix2D()
 	{
-		// Zero out all of the matrix's components
-		for (unsigned i = 0; i < 9; ++i)
+		for (int row = 0; row < 3; row++)
 		{
-			m[i / 3][i % 3] = 0;
+			for (int column = 0; column < 3; column++)
+			{
+				m[row][column] = 0.0f;
+			}
 		}
 	}
 
 	Matrix2D Matrix2D::IdentityMatrix()
 	{
-		Matrix2D identity;
-		// Create the identity part of the identity matrix
-		for (unsigned i = 0; i < 3; ++i)
-		{
-			identity.m[i][i] = 1;
-		}
+		Matrix2D outMatrix = Matrix2D();
 
-		return identity;
+		outMatrix.m[0][0] = 1.0f;
+		outMatrix.m[1][1] = 1.0f;
+		outMatrix.m[2][2] = 1.0f;
+
+		return outMatrix;
 	}
 
 	Matrix2D Matrix2D::Transposed() const
 	{
-		Matrix2D transposed;
-		// Create a copy of this matrix, but transposed
-		for (unsigned i = 0; i < 9; ++i)
+		Matrix2D outMatrix = Matrix2D();
+		
+		for (int row = 0; row < 3; row++)
 		{
-			transposed.m[i % 3][i / 3] = m[i / 3][i % 3];
+			for (int column = 0; column < 3; column++)
+			{
+				outMatrix.m[column][row] = m[row][column];
+			}
 		}
 
-		return transposed;
+		return outMatrix;
 	}
 
 	Matrix2D Matrix2D::TranslationMatrix(float x, float y)
 	{
-		Matrix2D translated(IdentityMatrix());
-		translated.m[0][2] = x;
-		translated.m[1][2] = y;
+		Matrix2D outMatrix = Matrix2D().IdentityMatrix();
 
-		return translated;
+		outMatrix.m[0][2] = x;
+		outMatrix.m[1][2] = y;
+
+		return outMatrix;
 	}
 
 	Matrix2D Matrix2D::ScalingMatrix(float x, float y)
 	{
-		Matrix2D scaled(IdentityMatrix());
-		scaled.m[0][0] = x;
-		scaled.m[1][1] = y;
+		Matrix2D outMatrix = Matrix2D().IdentityMatrix();
 
-		return scaled;
-	}
+		outMatrix.m[0][0] = x;
+		outMatrix.m[1][1] = y;
 
-	Matrix2D Matrix2D::RotationMatrixRadians(float angle)
-	{
-		Matrix2D rotated(IdentityMatrix());
-		rotated.m[0][0] = cosf(angle);
-		rotated.m[0][1] = -sinf(angle);
-		rotated.m[1][0] = sinf(angle);
-		rotated.m[1][1] = cosf(angle);
-
-		return rotated;
+		return outMatrix;
 	}
 
 	Matrix2D Matrix2D::RotationMatrixDegrees(float angle)
 	{
-		return RotationMatrixRadians(angle * static_cast<float>(M_PI) / 180.0f);
+		Matrix2D outMatrix = Matrix2D().IdentityMatrix();
+
+		angle = angle * 3.14159265358979323846f / 180.0f;
+
+		outMatrix.m[0][0] = cos(angle);
+		outMatrix.m[0][1] = -sin(angle);
+		outMatrix.m[1][0] = sin(angle);
+		outMatrix.m[1][1] = cos(angle);
+		
+		return outMatrix;
 	}
 
-	Matrix2D Matrix2D::operator*(const Matrix2D& other) const
+	Matrix2D Matrix2D::RotationMatrixRadians(float angle)
 	{
-		Matrix2D result(IdentityMatrix());
-		// Multiply the two matrices
-		for (unsigned i = 0; i < 3; ++i)
+		Matrix2D outMatrix = Matrix2D().IdentityMatrix();
+
+		outMatrix.m[0][0] = cos(angle);
+		outMatrix.m[0][1] = -sin(angle);
+		outMatrix.m[1][0] = sin(angle);
+		outMatrix.m[1][1] = cos(angle);
+
+		return outMatrix;
+	}
+
+	Matrix2D Matrix2D::operator*(const Matrix2D & other) const
+	{
+		Matrix2D outMatrix = Matrix2D();
+
+		for (int row = 0; row < 3; row++)
 		{
-			for (unsigned j = 0; j < 3; ++j)
+			for (int column = 0; column < 3; column++)
 			{
-				result.m[i][j] = RowColumnMultiply(other, i, j);
+				outMatrix.m[row][column] = RowColumnMultiply(other, row, column);
 			}
 		}
-		return result;
+
+		return outMatrix;
 	}
 
-	Matrix2D& Matrix2D::operator*=(const Matrix2D& other)
+	Matrix2D & Matrix2D::operator*=(const Matrix2D & other)
 	{
-		// Create a temporal matrix that stores the result
-		// Then copy its remains to this matrix
-		Matrix2D copy = *this * other;
-		*this = copy;
-		// Then return the instance of this matrix so that we can chain the multiplications toghether
+		Matrix2D outMatrix = *this * other;
+		*this = outMatrix;
+
 		return *this;
 	}
 
-	Vector2D Matrix2D::operator*(const Vector2D& other) const
+	Vector2D Matrix2D::operator*(const Vector2D & vec) const
 	{
-		Vector2D result;
-		
-		// Multiply the vector and the matrix, and save into 'result'
-		result.x = m[0][0] * other.x + m[0][1] * other.y + m[0][2];
-		result.y = m[1][0] * other.x + m[1][1] * other.y + m[1][2];
+		Vector2D outVector = Vector2D();
 
-		return result;
+		outVector.x = (m[0][0] * vec.x) + (m[0][1] * vec.y) + (m[0][2]);
+		outVector.y = (m[1][0] * vec.x) + (m[1][1] * vec.y) + (m[1][2]);
+
+		return outVector;
 	}
+
+	float Matrix2D::RowColumnMultiply(const Matrix2D & other, unsigned row, unsigned col) const
+	{
+		return (m[row][0] * other.m[0][col]) + (m[row][1] * other.m[1][col]) + (m[row][2] * other.m[2][col]);
+	}
+
 }

@@ -25,7 +25,6 @@
 //------------------------------------------------------------------------------
 
 class Tilemap;
-class Space;
 struct BoundingRectangle;
 
 //------------------------------------------------------------------------------
@@ -60,6 +59,12 @@ public:
 	//   A pointer to a collider.
 	Component* Clone() const override;
 
+	// Loads object data from a file.
+	void Deserialize(Parser& parser) override;
+
+	// Saves object data to a file.
+	void Serialize(Parser& parser) const override;
+
 	// Debug drawing for colliders.
 	void Draw() override;
 
@@ -73,11 +78,13 @@ public:
 	// Sets the tilemap to use for this collider.
 	// Params:
 	//   map = A pointer to the tilemap resource.
-	void SetTilemap(const Tilemap* map);
+	void SetTilemap(Tilemap* map);
 
-	static Vector2D ConvertWorldCordsToTileMapCords(Vector2D inputCords, Space* space);
+	Tilemap* GetTilemap();
 
-	static Vector2D ConvertTileMapCordsToWorldCords(Vector2D inputCords, Space* space);
+	Vector2D ConvertTileMapCordsToWorldCords(Vector2D inputCords);
+
+	Vector2D ConvertWorldCordsToTileMapCords(Vector2D inputCords);
 
 private:
 	//------------------------------------------------------------------------------
@@ -107,16 +114,19 @@ private:
 	//   objectTransform = Pointer to the object's transform component.
 	//   objectPhysics = Pointer to the object's physics component.
 	//   collisions = True/false values from map collision checks.
+	// Returns:
+	//   False if the point is outside the map or the map is empty at that position, 
+	//   or true if there is a tile at that position.
 	void ResolveCollisions(const BoundingRectangle& objectRectangle, Transform* objectTransform, 
 		Physics* objectPhysics, const MapCollision& collisions) const;
 
-	// Returns the center of the next tile on the x-axis or y-axis.
+	// Find the center of the closest tile on the x-axis or y-axis.
 	// Used for assisting in collision resolution on a particular side.
 	// Params:
 	//   side = Which side the collision is occurring on.
 	//   sidePosition = The x or y value of that side.
 	// Returns:
-	//   The center of the next tile for the given position on the given side.
+	//   The center of the closest tile to the given position on the given side.
 	float GetNextTileCenter(RectangleSide side, float sidePosition) const;
 
 	//------------------------------------------------------------------------------
@@ -124,7 +134,7 @@ private:
 	//------------------------------------------------------------------------------
 
 	// The tilemap
-	const Tilemap* map;
+	Tilemap* map;
 };
 
 //------------------------------------------------------------------------------

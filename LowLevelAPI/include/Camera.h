@@ -16,9 +16,14 @@
 //------------------------------------------------------------------------------
 
 #include "Vector2D.h"
-#include "Matrix3D.h"
 
 //------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+// Forward Declarations:
+//------------------------------------------------------------------------------
+
+struct Matrix3D;
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -28,40 +33,36 @@ class Camera
 {
 public:
 	Camera();
+	~Camera();
 
-	const Matrix3D& GetViewMatrix();
-	const Matrix3D& GetInverseViewMatrix();
-
+	// Translation - use this to pan
 	const Vector2D& GetTranslation() const;
 	void SetTranslation(const Vector2D& translation);
 
-	float GetDistance() const;
-	void SetDistance(float value);
-
+	// FOV - use this to zoom
 	float GetFOV() const;
-	float GetNearClip() const;
-	float GetFarClip() const;
+	void SetFOV(float angle);
 
-	float GetRotation() const;
-	void SetRotation(float rotation);
+	// Sets camera properties to default values
+	// (Translation of [0, 0], distance of 1, no rotation.)
+	void Reset();
 
-	static float distanceOffset;
+	// Returns the view matrix constructed using this camera's attributes.
+	const Matrix3D& GetViewMatrix() const;
+
+	// Returns the view-projection matrix constructed using this camera's attributes.
+	// Params:
+	//   aspectRatio = The ratio of the viewport's width to its height.
+	const Matrix3D& GetProjectionMatrix(float aspectRatio) const;
 
 private:
-	// Helper functions
-	void CalculateViewMatrix();
+	// Deleted to prevent issues with pimpl.
+	Camera(const Camera&) = delete;
+	Camera& operator=(const Camera&) = delete;
 
-	// Member data
-	Vector2D translation;
-	bool isDirty;
-	Matrix3D viewMatrix;
-	Matrix3D inverseViewMatrix;
-
-	float distance;
-	float FOV;
-	float nearClip;
-	float farClip;
-	float rotation;
+	// Private implementation
+	class Implementation;
+	Implementation* pimpl;
 };
 
 //------------------------------------------------------------------------------

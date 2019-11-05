@@ -1,0 +1,7 @@
+Brush
+{
+  numComponents : 1
+  TileMapBrush
+  {
+  }
+}

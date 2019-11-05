@@ -16,7 +16,7 @@
 //------------------------------------------------------------------------------
 
 #include "Component.h"
-#include "Color.h"
+#include <Color.h>
 
 //------------------------------------------------------------------------------
 
@@ -28,6 +28,7 @@ class Mesh;
 class SpriteSource;
 class Transform;
 class Vector2D;
+class SpriteText;
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -45,8 +46,19 @@ public:
 	// Create a new sprite object.
 	Sprite();
 
+	~Sprite();
+
 	// Clone the sprite, returning a dynamically allocated copy.
 	Component* Clone() const override;
+
+	// Loads object data from a file.
+	void Deserialize(Parser& parser) override;
+
+	// Saves object data to a file.
+	void Serialize(Parser& parser) const override;
+
+	// Add Component Spific Vars to a Tweak Bar
+	void AddVarsToTweakBar(TwBar* bar) override;
 
 	// Initialize components.
 	void Initialize();
@@ -83,10 +95,12 @@ public:
 	//   mesh = Pointer to a mesh created using the Alpha Engine.
 	void SetMesh(Mesh* mesh);
 
-	// Set a new SpriteSource for the specified sprite.
+	// Set a new sprite source for the specified sprite.
 	// Params:
 	//	 spriteSource = A new sprite source for the sprite.
 	void SetSpriteSource(SpriteSource* spriteSource);
+
+	SpriteSource* GetSpriteSource();
 
 	// Set the blend color for the specified sprite.
 	// Params:
@@ -95,6 +109,10 @@ public:
 
 	// Retrieves the blend color for the sprite.
 	const Color& GetColor() const;
+
+	void RefreshAutoMesh();
+
+	friend SpriteText;
 
 protected:
 	//------------------------------------------------------------------------------
@@ -120,6 +138,10 @@ private:
 
 	// Color used for blending/tint
 	Color color;
+
+	TwBar* bar;
+
+	std::string ssName;
 };
 
 //------------------------------------------------------------------------------
