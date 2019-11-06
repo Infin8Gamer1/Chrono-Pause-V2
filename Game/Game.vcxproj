@@ -109,9 +109,9 @@ xcopy ..\AntTweakBar\lib\AntTweakBar64.dll "$(OutDir)" /Y</Command>
   <ItemGroup>
     <ClCompile Include="Source\ColorChange.cpp" />
     <ClCompile Include="Source\ExplosionTimer.cpp" />
+    <ClCompile Include="Source\Lava.cpp" />
     <ClCompile Include="Source\Level1.cpp" />
     <ClCompile Include="Source\Main.cpp" />
-    <ClCompile Include="Source\MonkeyMovement.cpp" />
     <ClCompile Include="Source\PlayerAnimController.cpp" />
     <ClCompile Include="Source\PlayerMove.cpp" />
     <ClCompile Include="Source\ScreenWrap.cpp" />
@@ -124,8 +124,8 @@ xcopy ..\AntTweakBar\lib\AntTweakBar64.dll "$(OutDir)" /Y</Command>
   <ItemGroup>
     <ClInclude Include="Source\ColorChange.h" />
     <ClInclude Include="Source\ExplosionTimer.h" />
+    <ClInclude Include="Source\Lava.h" />
     <ClInclude Include="Source\Level1.h" />
-    <ClInclude Include="Source\MonkeyMovement.h" />
     <ClInclude Include="Source\PlayerAnimController.h" />
     <ClInclude Include="Source\PlayerMove.h" />
     <ClInclude Include="Source\ScreenWrap.h" />

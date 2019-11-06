@@ -20,6 +20,7 @@
 #include <SoundManager.h>
 #include <Level.h>
 #include <Space.h>
+#include <Parser.h>
 
 #include <Input.h>				// Input
 #include <Graphics.h>
@@ -173,10 +174,18 @@ void Behaviors::PlayerObjectCollisionHandler(GameObject& current, GameObject& ot
 	{
 		playerMove->holdingCube = &other;
 	}
-	else if(other.GetName() == "Hazard")
+	else if(other.GetName().find("Lava") != std::string::npos)
 	{
 		//create the explosion
-		GameObject* explosion = new GameObject(*current.GetSpace()->GetObjectManager().GetArchetypeByName("Explosion"));
+		Parser* parser = new Parser("Assets/Objects/Explosion.object", std::fstream::in);
+
+		std::string name;
+		name = parser->ReadLine();
+
+		GameObject* explosion = new GameObject(name);
+
+		explosion->DeserializeB(*parser);
+
 		if (explosion != nullptr) {
 			current.GetSpace()->GetObjectManager().AddObject(*explosion);
 
@@ -186,7 +195,7 @@ void Behaviors::PlayerObjectCollisionHandler(GameObject& current, GameObject& ot
 			explosion->GetComponent<ExplosionTimer>()->Explode();
 		}
 
-		//destroy the player
+		//destroy the player and retarget the camera to null
 		current.GetSpace()->GetLevel()->cameraController->Retarget(static_cast<Transform*>(nullptr));
 		current.Destroy();
 	}

@@ -1,0 +1,48 @@
+﻿  stdafx.cpp
+  ColorChange.cpp
+  ExplosionTimer.cpp
+  Lava.cpp
+  Level1.cpp
+  Main.cpp
+  PlayerAnimController.cpp
+  PlayerMove.cpp
+  ScreenWrap.cpp
+  TimedDeath.cpp
+C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\Source\ExplosionTimer.cpp(41,36): warning C4100: 'dt': unreferenced formal parameter
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 1550 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+BetaHigh_x64.lib(Vertex.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(Vertex.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(Vector3D.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(Vector3D.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(Vector2D.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(Vector2D.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(Texture.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(Texture.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(System.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(System.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(stdafx.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(stdafx.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(Shapes2D.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(Shapes2D.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(ShaderManager.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(ShaderManager.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(Renderer.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(Renderer.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(Random.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(Random.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(MeshFactory.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(MeshFactory.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(Mesh.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(Mesh.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(Matrix3D.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(Matrix3D.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(Matrix2D.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(Matrix2D.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(Input.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(Input.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(Graphics.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(Graphics.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(FrameRateController.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(FrameRateController.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(ForwardRenderer.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(ForwardRenderer.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(Engine.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(Engine.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(DebugDraw.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(DebugDraw.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(Color.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(Color.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(Camera.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(Camera.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(BetaObject.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(BetaObject.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+BetaHigh_x64.lib(glad.obj) : warning LNK4099: PDB 'BetaLow_x64.pdb' was not found with 'BetaHigh_x64.lib(glad.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\x64\Release\BetaLow_x64.pdb'; linking object as if no debug info
+  Game.vcxproj -> C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\Game\\x64\Release\Game.exe
+  ..\fmod\lib\fmod64.dll
+  1 File(s) copied
+  ..\fmod\lib\fmodstudio64.dll
+  1 File(s) copied
+  ..\glfw\lib\x64\glfw3.dll
+  1 File(s) copied
+  ..\AntTweakBar\lib\AntTweakBar64.dll
+  1 File(s) copied

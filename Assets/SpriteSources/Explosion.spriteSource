@@ -1,0 +1,8 @@
+Explosion
+{
+	textureName : Explosion.png
+    textureRows : 4
+    textureColumns : 4
+	frameCount : 16
+	frameStart : 0
+}

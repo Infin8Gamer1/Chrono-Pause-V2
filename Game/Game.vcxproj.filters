@@ -11,9 +11,6 @@
     <ClCompile Include="Source\TimedDeath.cpp">
       <Filter>Game\Behaviors\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Source\MonkeyMovement.cpp">
-      <Filter>Game\Behaviors</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Level1.cpp">
       <Filter>Game\Levels</Filter>
     </ClCompile>
@@ -29,6 +26,9 @@
     <ClCompile Include="Source\ExplosionTimer.cpp">
       <Filter>Game\Behaviors\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Lava.cpp">
+      <Filter>Game\Behaviors\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ColorChange.h">
@@ -39,9 +39,6 @@
     </ClInclude>
     <ClInclude Include="Source\TimedDeath.h">
       <Filter>Game\Behaviors\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MonkeyMovement.h">
-      <Filter>Game\Behaviors</Filter>
     </ClInclude>
     <ClInclude Include="Source\Level1.h">
       <Filter>Game\Levels</Filter>
@@ -56,6 +53,9 @@
       <Filter>Game\Behaviors</Filter>
     </ClInclude>
     <ClInclude Include="Source\ExplosionTimer.h">
+      <Filter>Game\Behaviors\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Lava.h">
       <Filter>Game\Behaviors\Utils</Filter>
     </ClInclude>
   </ItemGroup>

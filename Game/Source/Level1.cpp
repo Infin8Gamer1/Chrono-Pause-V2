@@ -19,9 +19,10 @@
 #include <Physics.h>
 #include <ColliderTilemap.h>
 #include <SpriteTilemap.h>
-#include "MonkeyMovement.h"
 #include "PlayerAnimController.h"
 #include "PlayerMove.h"
+#include "ExplosionTimer.h"
+#include "Lava.h"
 
 //Resources
 #include <Mesh.h>
@@ -41,12 +42,11 @@
 #include <SpaceManager.h>
 #include <Graphics.h>
 #include <Parser.h>
+#include <CameraController.h>
+
 
 Levels::Level1::Level1() : Level("LevelEditor")
 {
-	// Sound manager
-	soundManager = nullptr;
-	musicChannel = nullptr;
 }
 
 void Levels::Level1::Load()
@@ -58,17 +58,10 @@ void Levels::Level1::Load()
 	Graphics::GetInstance().GetCurrentCamera().Reset();
 
 	////Register Custom Components
-	GameObjectFactory::GetInstance().RegisterComponent<Behaviors::MonkeyMovement>();
 	GameObjectFactory::GetInstance().RegisterComponent<Behaviors::PlayerAnimController>();
 	GameObjectFactory::GetInstance().RegisterComponent<Behaviors::PlayerMove>();
-
-	//Setup Sounds
-	soundManager = Engine::GetInstance().GetModule<SoundManager>();
-	soundManager->AddMusic("Asteroid_Field.mp3");
-	soundManager->AddEffect("teleport.wav");
-
-	soundManager->AddBank("Master Bank.strings.bank");
-	soundManager->AddBank("Master Bank.bank");
+	GameObjectFactory::GetInstance().RegisterComponent<Behaviors::ExplosionTimer>();
+	GameObjectFactory::GetInstance().RegisterComponent<Behaviors::Lava>();
 
 	SetFileLocation("Assets/Level1.lvl");
 }
@@ -78,29 +71,32 @@ void Levels::Level1::Initialize()
 	std::cout << GetName() << "::Initialize" << std::endl;
 
 	LoadLevel();
+
+	cameraController = new CameraController(*GetSpace()->GetCamera());
+
+	cameraController->Retarget(GetSpace()->GetObjectManager().GetObjectByName("Player"));
+	cameraController->Reset();
+	cameraController->SetSpeed(0.01f);
 }
 
 void Levels::Level1::Update(float dt)
 {
 	UNREFERENCED_PARAMETER(dt);
 
-	//follow cam
-	//Graphics::GetInstance().GetCurrentCamera().SetTranslation(GetSpace()->GetObjectManager().GetObjectByName("Player")->GetComponent<Transform>()->GetTranslation());
+
+	// Update the camera controller
+	cameraController->Follow();
 }
 
 void Levels::Level1::Shutdown()
 {
 	std::cout << GetName() << "::Shutdown" << std::endl;
 
-	//SaveLevel();
-
-	musicChannel->stop();
-	musicChannel = nullptr;
+	delete cameraController;
+	cameraController = nullptr;
 }
 
 void Levels::Level1::Unload()
 {
 	std::cout << GetName() << "::Unload" << std::endl;
-
-	soundManager->Shutdown();
 }

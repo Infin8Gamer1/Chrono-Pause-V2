@@ -1,0 +1,22 @@
+Explosion
+{
+  numComponents : 4
+  Transform
+  {
+    translation : { 0, 0 }
+    rotation : 0
+    scale : { 100, 100 }
+  }
+  Sprite
+  {
+    frameIndex : 0
+    color : { 1 , 1 , 1 , 1 }
+    spriteSourceName : Explosion
+  }
+  Animation
+  {
+  }
+  Behaviors::ExplosionTimer
+  {
+  }
+}

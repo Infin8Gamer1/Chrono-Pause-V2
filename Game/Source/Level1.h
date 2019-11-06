@@ -73,10 +73,6 @@ namespace Levels
 		
 		// Window Title
 		const std::string WindowTitle = "Level 1";
-
-		// Sound manager
-		SoundManager* soundManager;
-		FMOD::Channel* musicChannel;
 	};
 }
 

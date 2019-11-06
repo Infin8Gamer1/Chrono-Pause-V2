@@ -22,8 +22,6 @@
 Level::Level(const std::string & name) : BetaObject(name)
 {
 	fileLocation = "";
-
-	cameraController = new CameraController(Graphics::GetInstance().GetCurrentCamera());
 }
 
 Space * Level::GetSpace() const

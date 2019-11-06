@@ -133,7 +133,7 @@
     <ClInclude Include="include\FileOpenHelper.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\CameraController.h">
+    <ClInclude Include="include\CameraController.h">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>

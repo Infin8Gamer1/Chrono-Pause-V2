@@ -104,5 +104,7 @@ private:
 
 	// Last sprite source used by sprite
 	const SpriteSource* lastSpriteSource;
+
+	bool autoPlay;
 };
 //----------------------------------------------------------------------------

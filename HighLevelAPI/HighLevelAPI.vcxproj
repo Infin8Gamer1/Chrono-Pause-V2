@@ -89,6 +89,7 @@
   <ItemGroup>
     <ClInclude Include="include\Animation.h" />
     <ClInclude Include="include\CallbackInputManager.h" />
+    <ClInclude Include="include\CameraController.h" />
     <ClInclude Include="include\Collider.h" />
     <ClInclude Include="include\ColliderCircle.h" />
     <ClInclude Include="include\ColliderLine.h" />
@@ -118,7 +119,6 @@
     <ClInclude Include="include\stdafx.h" />
     <ClInclude Include="include\Tilemap.h" />
     <ClInclude Include="include\Transform.h" />
-    <ClInclude Include="src\CameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CallbackInputManager.cpp" />

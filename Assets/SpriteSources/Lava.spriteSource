@@ -1,0 +1,8 @@
+Lava
+{
+	textureName : Lava.png
+    textureRows : 1
+    textureColumns : 4
+	frameCount : 4
+	frameStart : 0
+}

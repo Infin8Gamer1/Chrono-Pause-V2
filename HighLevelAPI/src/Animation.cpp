@@ -14,6 +14,7 @@
 #include "Sprite.h"
 #include "GameObject.h"
 #include <SpriteSource.h>
+#include <Parser.h>
 
 Animation::Animation() : Component("Animation")
 {
@@ -34,6 +35,8 @@ Animation::Animation() : Component("Animation")
 	sprite = nullptr;
 
 	lastSpriteSource = nullptr;
+
+	autoPlay = false;
 }
 
 Component * Animation::Clone() const
@@ -50,7 +53,39 @@ void Animation::Initialize()
 	sprite = GetOwner()->GetComponent<Sprite>();
 
 	lastSpriteSource = sprite->GetSpriteSource();
+
+	if (autoPlay) {
+		Play(0.1f, isLooping);
+	}
 }
+
+//void Animation::Deserialize(Parser& parser)
+//{
+//	//get autoPlay
+//	bool _autoPlay;
+//	parser.ReadVariable("AutoPlay", _autoPlay);
+//
+//	autoPlay = _autoPlay;
+//
+//	if (autoPlay)
+//	{
+//		//get is loop
+//		bool _isLoop;
+//		parser.ReadVariable("Loop", _isLoop);
+//
+//		isLooping = _isLoop;
+//	}
+//}
+//
+//void Animation::Serialize(Parser& parser) const
+//{
+//	parser.WriteVariable("AutoPlay", autoPlay);
+//
+//	if (autoPlay)
+//	{
+//		parser.WriteVariable("Loop", isLooping);
+//	}
+//}
 
 void Animation::Play(float frameDurationInput, bool isLoopingInput, bool playInReverseInput)
 {

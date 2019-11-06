@@ -22,8 +22,7 @@ Player
     gravity : { 0, -275 }
   }
   Animation
-  {
-  }
+  { }
   Behaviors::PlayerAnimController
   { }
   ColliderRectangle
