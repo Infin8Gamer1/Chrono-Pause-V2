@@ -1,0 +1,8 @@
+TileMapConcrete
+{
+	textureName : TileMapConcrete.png
+    textureRows : 6
+    textureColumns : 4
+	frameCount : -1
+	frameStart : -1
+}

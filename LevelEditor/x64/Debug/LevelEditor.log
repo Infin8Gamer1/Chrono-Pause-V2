@@ -1,7 +1,6 @@
 ﻿  stdafx.cpp
   Button.cpp
   CameraMovement.cpp
-c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\leveleditor\source\cameramovement.cpp(67): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   GameObjectButton.cpp
   GameObjectPlacer.cpp
   LevelEditorLevel.cpp
@@ -14,6 +13,7 @@ c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\leveleditor\source
   TileButton.cpp
   TileMapBrush.cpp
   Generating Code...
+C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\LevelEditor\Source\CameraMovement.cpp(67,18): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
 BetaHigh_x64_D.lib(Vertex.obj) : warning LNK4099: PDB 'BetaLow_x64_D.pdb' was not found with 'BetaHigh_x64_D.lib(Vertex.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\LevelEditor\x64\Debug\BetaLow_x64_D.pdb'; linking object as if no debug info
 BetaHigh_x64_D.lib(Vector3D.obj) : warning LNK4099: PDB 'BetaLow_x64_D.pdb' was not found with 'BetaHigh_x64_D.lib(Vector3D.obj)' or at 'C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\LevelEditor\x64\Debug\BetaLow_x64_D.pdb'; linking object as if no debug info

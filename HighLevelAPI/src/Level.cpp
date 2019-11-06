@@ -16,10 +16,14 @@
 #include <GameObjectFactory.h>
 #include <Transform.h>
 #include <sstream>
+#include "CameraController.h"
+#include <Graphics.h>
 
 Level::Level(const std::string & name) : BetaObject(name)
 {
 	fileLocation = "";
+
+	cameraController = new CameraController(Graphics::GetInstance().GetCurrentCamera());
 }
 
 Space * Level::GetSpace() const

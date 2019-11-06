@@ -14,19 +14,19 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{4D019903-DA3D-466B-8863-DE77285C6531}</ProjectGuid>
     <RootNamespace>HighLevelAPI</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -118,9 +118,11 @@
     <ClInclude Include="include\stdafx.h" />
     <ClInclude Include="include\Tilemap.h" />
     <ClInclude Include="include\Transform.h" />
+    <ClInclude Include="src\CameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CallbackInputManager.cpp" />
+    <ClCompile Include="src\CameraController.cpp" />
     <ClCompile Include="src\ColliderLine.cpp" />
     <ClCompile Include="src\FileOpenHelper.cpp" />
     <ClCompile Include="src\SpaceManager.cpp" />

@@ -84,6 +84,38 @@ void Animation::Play(float frameDurationInput, bool isLoopingInput, bool playInR
 	isDone = false;
 }
 
+void Animation::PlayB(int frameStartInput, int frameCount, float frameDurationInput, bool isLoopingInput, bool playInReverseInput)
+{
+	//std::cout << "Animation::Play" << std::endl;
+
+	lastSpriteSource = sprite->GetSpriteSource();
+
+	isLooping = isLoopingInput;
+	playInReverse = playInReverseInput;
+
+
+	if (!playInReverse) {
+		frameStart = frameStartInput;
+		frameEnd = frameStartInput + frameCount - 1;
+	}
+	else {
+		frameStart = frameStartInput + frameCount - 1;
+		frameEnd = frameStartInput;
+	}
+
+	frameIndex = frameStart;
+
+	//std::cout << "Start : " << frameStart << ", End : " << frameEnd << std::endl;
+
+	GetOwner()->GetComponent<Sprite>()->SetFrame(frameIndex);
+
+	frameDuration = frameDurationInput;
+	frameDelay = frameDuration;
+
+	isRunning = true;
+	isDone = false;
+}
+
 void Animation::FixedUpdate(float dt)
 {
 	//std::cout << "Animation::FixedUpdate" << std::endl;

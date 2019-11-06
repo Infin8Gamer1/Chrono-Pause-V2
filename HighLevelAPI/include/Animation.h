@@ -53,6 +53,8 @@ public:
 	//	 isLooping = True if the animation loops, false otherwise.
 	void Play(float frameDuration, bool isLooping, bool playInReverse = false);
 
+	void PlayB(int frameStart, int frameCount, float frameDuration, bool isLooping, bool playInReverse = false);
+
 	// Update the animation.
 	// Params:
 	//	 dt = Change in time (in seconds) since the last game loop.

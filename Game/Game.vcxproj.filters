@@ -20,6 +20,15 @@
     <ClCompile Include="Source\stdafx.cpp">
       <Filter>Precompiled</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PlayerAnimController.cpp">
+      <Filter>Game\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayerMove.cpp">
+      <Filter>Game\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ExplosionTimer.cpp">
+      <Filter>Game\Behaviors\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ColorChange.h">
@@ -39,6 +48,15 @@
     </ClInclude>
     <ClInclude Include="Source\stdafx.h">
       <Filter>Precompiled</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayerAnimController.h">
+      <Filter>Game\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayerMove.h">
+      <Filter>Game\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ExplosionTimer.h">
+      <Filter>Game\Behaviors\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

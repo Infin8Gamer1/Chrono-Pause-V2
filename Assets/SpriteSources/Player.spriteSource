@@ -1,0 +1,8 @@
+Player
+{
+	textureName : Player.png
+    textureRows : 3
+    textureColumns : 3
+	frameCount : 9
+	frameStart : 0
+}

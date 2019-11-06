@@ -133,6 +133,9 @@
     <ClInclude Include="include\FileOpenHelper.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\CameraController.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\stdafx.cpp">
@@ -227,6 +230,9 @@
     </ClCompile>
     <ClCompile Include="src\FileOpenHelper.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CameraController.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

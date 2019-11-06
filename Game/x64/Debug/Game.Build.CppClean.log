@@ -1,34 +1,36 @@
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\game\x64\debug\game.pch
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\game\x64\debug\vc141.pdb
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\game\x64\debug\vc141.idb
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\game\x64\debug\stdafx.obj
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\game\x64\debug\timeddeath.obj
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\game\x64\debug\screenwrap.obj
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\game\x64\debug\monkeymovement.obj
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\game\x64\debug\main.obj
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\game\x64\debug\level1.obj
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\game\x64\debug\colorchange.obj
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\game\x64\debug\game.ilk
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\game\x64\debug\game.exe
-c:\users\jacob\documents\_dev\robotics\githubrepos\beta-level-editor\beta engine\game\x64\debug\game.pdb
-c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\colorchange.obj
-c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\level1.obj
-c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\main.obj
-c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\monkeymovement.obj
-c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\screenwrap.obj
-c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\stdafx.obj
-c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\timeddeath.obj
-c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.ilk
 c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.pch
-c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\vc141.idb
-c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.pdb
 c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\vc141.pdb
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\vc141.idb
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\stdafx.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\vc142.pdb
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\vc142.idb
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\timeddeath.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\screenwrap.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\monkeymovement.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\main.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\level1.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\colorchange.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\playermove.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\explosiontimer.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\cameracontroller.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\playeranimcontroller.obj
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.exe
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.ilk
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.pdb
 c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\\x64\debug\game.pdb
-c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\\x64\debug\game.exe
-c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\\x64\debug\game.ilk
 c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.tlog\cl.command.1.tlog
 c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.tlog\cl.read.1.tlog
 c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.tlog\cl.write.1.tlog
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.tlog\link-cvtres.read.1.tlog
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.tlog\link-cvtres.write.1.tlog
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.tlog\link-rc.read.1.tlog
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.tlog\link-rc.write.1.tlog
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.tlog\link.26784-cvtres.read.1.tlog
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.tlog\link.26784-cvtres.write.1.tlog
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.tlog\link.26784-rc.read.1.tlog
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.tlog\link.26784-rc.write.1.tlog
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.tlog\link.26784.read.1.tlog
+c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.tlog\link.26784.write.1.tlog
 c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.tlog\link.command.1.tlog
 c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.tlog\link.read.1.tlog
 c:\users\jacob\documents\_dev\chrono-pause-v2\chrono-pause-v2\game\x64\debug\game.tlog\link.write.1.tlog

@@ -28,6 +28,7 @@
 class Space;
 class GameObject;
 class Tilemap;
+class CameraController;
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -59,6 +60,8 @@ public:
 	void SetFileLocation(std::string fileLocation);
 
 	std::string GetFileLocation();
+
+	CameraController* cameraController;
 
 private:
 

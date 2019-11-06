@@ -20,6 +20,8 @@
 #include <ColliderTilemap.h>
 #include <SpriteTilemap.h>
 #include "MonkeyMovement.h"
+#include "PlayerAnimController.h"
+#include "PlayerMove.h"
 
 //Resources
 #include <Mesh.h>
@@ -57,6 +59,8 @@ void Levels::Level1::Load()
 
 	////Register Custom Components
 	GameObjectFactory::GetInstance().RegisterComponent<Behaviors::MonkeyMovement>();
+	GameObjectFactory::GetInstance().RegisterComponent<Behaviors::PlayerAnimController>();
+	GameObjectFactory::GetInstance().RegisterComponent<Behaviors::PlayerMove>();
 
 	//Setup Sounds
 	soundManager = Engine::GetInstance().GetModule<SoundManager>();
@@ -80,7 +84,8 @@ void Levels::Level1::Update(float dt)
 {
 	UNREFERENCED_PARAMETER(dt);
 
-	Graphics::GetInstance().GetCurrentCamera().SetTranslation(GetSpace()->GetObjectManager().GetObjectByName("Monkey")->GetComponent<Transform>()->GetTranslation());
+	//follow cam
+	//Graphics::GetInstance().GetCurrentCamera().SetTranslation(GetSpace()->GetObjectManager().GetObjectByName("Player")->GetComponent<Transform>()->GetTranslation());
 }
 
 void Levels::Level1::Shutdown()

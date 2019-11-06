@@ -1,36 +1,36 @@
 LevelEditor
 {
-  numGameObjects : 5
+  numGameObjects : 2
   {
     TileMap
     {
       numComponents : 3
       Transform
       {
-        translation : { -350, 400 }
+        translation : { -50, 150 }
         rotation : 0
         scale : { 50, 50 }
       }
       SpriteTilemap
       {
-        frameIndex : 4
+        frameIndex : 10
         color : { 1 , 1 , 1 , 1 }
-        spriteSourceName : TileMap
-        tilemapLoc : Default
+        spriteSourceName : TileMapConcrete
+        tilemapLoc : Level1
       }
       ColliderTilemap
       {
         CollisionGroup : default
         CollisionFlags : all
-        tilemapLoc : Default
+        tilemapLoc : Level1
       }
     }
-    Monkey
+    Player
     {
-      numComponents : 6
+      numComponents : 7
       Transform
       {
-        translation : { 100.5, -75 }
+        translation : { 27, 25 }
         rotation : 0
         scale : { 100, 100 }
       }
@@ -38,10 +38,7 @@ LevelEditor
       {
         frameIndex : 0
         color : { 1 , 1 , 1 , 1 }
-        spriteSourceName : MonkeyWalk
-      }
-      Animation
-      {
+        spriteSourceName : Player
       }
       Physics
       {
@@ -51,99 +48,18 @@ LevelEditor
         mass : 1
         gravity : { 0, -275 }
       }
+      Animation
+      {
+      }
       ColliderRectangle
       {
         CollisionGroup : default
         CollisionFlags : all
-        extents : { 50, 50 }
+        extents : { 48, 50 }
       }
-      Behaviors::MonkeyMovement
+      Behaviors::PlayerAnimController
       { } 
-    }
-    Circle
-    {
-      numComponents : 2
-      Transform
-      {
-        translation : { -141.5, 200.5 }
-        rotation : 0
-        scale : { -137, -47 }
-      }
-      Sprite
-      {
-        frameIndex : 0
-        color : { 1 , 1 , 1 , 1 }
-        spriteSourceName : Circle
-      }
-    }
-    Monkey_1
-    {
-      numComponents : 6
-      Transform
-      {
-        translation : { -123.5, -75 }
-        rotation : 0
-        scale : { 100, 100 }
-      }
-      Sprite
-      {
-        frameIndex : 12
-        color : { 1 , 1 , 1 , 1 }
-        spriteSourceName : MonkeyIdle
-      }
-      Animation
-      {
-      }
-      Physics
-      {
-        acceleration : { 0, -275 }
-        velocity : { 0, 0 }
-        angularVelocity : 0
-        mass : 1
-        gravity : { 0, -275 }
-      }
-      ColliderRectangle
-      {
-        CollisionGroup : default
-        CollisionFlags : all
-        extents : { 50, 50 }
-      }
-      Behaviors::MonkeyMovement
-      { } 
-    }
-    Monkey_2
-    {
-      numComponents : 6
-      Transform
-      {
-        translation : { 425, -75 }
-        rotation : 0
-        scale : { 100, 100 }
-      }
-      Sprite
-      {
-        frameIndex : 0
-        color : { 1 , 0 , 0 , 1 }
-        spriteSourceName : MonkeyWalk
-      }
-      Animation
-      {
-      }
-      Physics
-      {
-        acceleration : { 0, -275 }
-        velocity : { 0, 0 }
-        angularVelocity : 0
-        mass : 1
-        gravity : { 0, -275 }
-      }
-      ColliderRectangle
-      {
-        CollisionGroup : default
-        CollisionFlags : all
-        extents : { 50, 50 }
-      }
-      Behaviors::MonkeyMovement
+      Behaviors::PlayerMove
       { } 
     }
   }
