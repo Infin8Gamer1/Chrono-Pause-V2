@@ -29,6 +29,12 @@
     <ClCompile Include="Source\Lava.cpp">
       <Filter>Game\Behaviors\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Source\MouseClick.cpp">
+      <Filter>Game\Behaviors\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UIButton.cpp">
+      <Filter>Game\Behaviors\IO</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ColorChange.h">
@@ -58,6 +64,12 @@
     <ClInclude Include="Source\Lava.h">
       <Filter>Game\Behaviors\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\MouseClick.h">
+      <Filter>Game\Behaviors\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UIButton.h">
+      <Filter>Game\Behaviors\IO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Game">
@@ -74,6 +86,9 @@
     </Filter>
     <Filter Include="Precompiled">
       <UniqueIdentifier>{e5939826-553f-41c0-86ab-4a31f6293a2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Behaviors\IO">
+      <UniqueIdentifier>{5eba655c-2d15-4753-ad44-18626b9195c8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

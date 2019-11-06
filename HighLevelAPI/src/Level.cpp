@@ -22,6 +22,8 @@
 Level::Level(const std::string & name) : BetaObject(name)
 {
 	fileLocation = "";
+
+	createTweakBarsOnLoad = false;
 }
 
 Space * Level::GetSpace() const
@@ -72,6 +74,11 @@ void Level::Deserialize(Parser & parser)
 		GameObject* object = new GameObject(name);
 
 		object->DeserializeB(parser);
+
+		if (createTweakBarsOnLoad)
+		{
+			object->CreateTweakBar();
+		}
 
 		GetSpace()->GetObjectManager().AddObject(*object);
 	}
@@ -140,9 +147,11 @@ void Level::SaveLevel()
 	}
 }
 
-void Level::LoadLevel()
+void Level::LoadLevel(bool createTweakBars)
 {
 	if (GetFileLocation() != "") {
+		createTweakBarsOnLoad = createTweakBars;
+
 		Parser* parser = new Parser(GetFileLocation(), std::fstream::in);
 
 		try

@@ -177,14 +177,23 @@ void Behaviors::PlayerObjectCollisionHandler(GameObject& current, GameObject& ot
 	else if(other.GetName().find("Lava") != std::string::npos)
 	{
 		//create the explosion
-		Parser* parser = new Parser("Assets/Objects/Explosion.object", std::fstream::in);
+		Parser* parse = new Parser("Assets/Objects/Explosion.object", std::fstream::in);
 
-		std::string name;
-		name = parser->ReadLine();
+		GameObject* explosion = new GameObject("Explosion");
 
-		GameObject* explosion = new GameObject(name);
+		try
+		{
+			explosion->Deserialize(*parse);
+		}
+		catch (ParseException e)
+		{
+			std::cout << e.what() << std::endl;
 
-		explosion->DeserializeB(*parser);
+			//DisplayMessage(e.what());
+		}
+
+		delete parse;
+		parse = nullptr;
 
 		if (explosion != nullptr) {
 			current.GetSpace()->GetObjectManager().AddObject(*explosion);

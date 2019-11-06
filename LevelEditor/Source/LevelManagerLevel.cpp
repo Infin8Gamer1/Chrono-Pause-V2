@@ -77,6 +77,9 @@ LRESULT CALLBACK Levels::LevelManagerLevel::WindowProc(HWND hwnd, UINT uMsg, WPA
 			std::cout << "Open Game Object Menu Clicked" << std::endl;
 			Instance->AddGameObject();
 			break;
+		case ID_RELOAD_LEVEL:
+			std::cout << "Reload Level Clicked" << std::endl;
+			Instance->levelSpace->RestartLevel();
 		}
 		break;
 	}

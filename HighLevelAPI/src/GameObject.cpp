@@ -19,6 +19,7 @@
 GameObject::GameObject(const std::string & name) : BetaObject(name)
 {
 	isDestroyed = false;
+	isPaused = false;
 	damageHandler = nullptr;
 	Health = 0;
 	Path = name;
@@ -308,4 +309,14 @@ const std::string & GameObject::GetName() const
 void GameObject::SetName(const std::string& newName)
 {
 	gameObjectName = newName;
+}
+
+void GameObject::SetPaused(bool paused)
+{
+	isPaused = paused;
+}
+
+bool GameObject::IsPaused() const
+{
+	return isPaused;
 }

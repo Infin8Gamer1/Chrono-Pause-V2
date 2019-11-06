@@ -182,7 +182,8 @@ void GameObjectManager::VariableUpdate(float dt)
 {
 	for (size_t i = 0; i < gameObjectActiveList.size(); i++)
 	{
-		gameObjectActiveList[i]->Update(dt);
+		if (!gameObjectActiveList[i]->IsPaused())
+			gameObjectActiveList[i]->Update(dt);
 	}
 }
 
@@ -194,7 +195,8 @@ void GameObjectManager::FixedUpdate(float dt)
 	{
 		for (size_t i = 0; i < gameObjectActiveList.size(); i++)
 		{
-			gameObjectActiveList[i]->FixedUpdate(fixedUpdateDt);
+			if (!gameObjectActiveList[i]->IsPaused())
+				gameObjectActiveList[i]->FixedUpdate(fixedUpdateDt);
 		}
 
 		CheckCollisions();

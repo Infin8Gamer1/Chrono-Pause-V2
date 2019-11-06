@@ -6,6 +6,7 @@
 #define ID_FILE_OPEN                    40001
 #define ID_FILE_SAVE                    40002
 #define ID_FILE_OPENGAMEOBJECT          40003
+#define ID_RELOAD_LEVEL					40004
 
 // Next default values for new objects
 // 

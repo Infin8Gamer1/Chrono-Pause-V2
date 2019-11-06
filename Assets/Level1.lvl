@@ -1,6 +1,6 @@
 LevelEditor
 {
-  numGameObjects : 7
+  numGameObjects : 8
   {
     TileMap
     {
@@ -195,6 +195,24 @@ LevelEditor
         extents : { 48, 50 }
       }
       Behaviors::Lava
+      { } 
+    }
+    Clicker
+    {
+      numComponents : 3
+      Transform
+      {
+        translation : { 0, 0 }
+        rotation : 0
+        scale : { 10, 10 }
+      }
+      ColliderCircle
+      {
+        CollisionGroup : default
+        CollisionFlags : all
+        radius : 10
+      }
+      Behaviors::MouseClick
       { } 
     }
   }

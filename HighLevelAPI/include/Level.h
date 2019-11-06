@@ -55,7 +55,7 @@ public:
 
 	void SaveLevel();
 
-	void LoadLevel();
+	void LoadLevel(bool createTewakBars = false);
 
 	void SetFileLocation(std::string fileLocation);
 
@@ -68,6 +68,8 @@ private:
 	void DisplayMessage(std::string what);
 
 	std::string fileLocation;
+
+	bool createTweakBarsOnLoad;
 };
 
 //------------------------------------------------------------------------------

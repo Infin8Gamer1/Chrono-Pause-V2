@@ -112,6 +112,7 @@ xcopy ..\AntTweakBar\lib\AntTweakBar64.dll "$(OutDir)" /Y</Command>
     <ClCompile Include="Source\Lava.cpp" />
     <ClCompile Include="Source\Level1.cpp" />
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\MouseClick.cpp" />
     <ClCompile Include="Source\PlayerAnimController.cpp" />
     <ClCompile Include="Source\PlayerMove.cpp" />
     <ClCompile Include="Source\ScreenWrap.cpp" />
@@ -120,17 +121,20 @@ xcopy ..\AntTweakBar\lib\AntTweakBar64.dll "$(OutDir)" /Y</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\TimedDeath.cpp" />
+    <ClCompile Include="Source\UIButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ColorChange.h" />
     <ClInclude Include="Source\ExplosionTimer.h" />
     <ClInclude Include="Source\Lava.h" />
     <ClInclude Include="Source\Level1.h" />
+    <ClInclude Include="Source\MouseClick.h" />
     <ClInclude Include="Source\PlayerAnimController.h" />
     <ClInclude Include="Source\PlayerMove.h" />
     <ClInclude Include="Source\ScreenWrap.h" />
     <ClInclude Include="Source\stdafx.h" />
     <ClInclude Include="Source\TimedDeath.h" />
+    <ClInclude Include="Source\UIButton.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

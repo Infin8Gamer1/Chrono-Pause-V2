@@ -170,6 +170,12 @@ public:
 
 	void SetName(const std::string& newName);
 
+	// Set whether the object is paused or not
+	void SetPaused(bool paused);
+
+	// Returns whether the object is paused or not
+	bool IsPaused() const;
+
 private:
 	//------------------------------------------------------------------------------
 	// Private Variables:
@@ -189,6 +195,9 @@ private:
 
 	// the health of this object
 	int Health;
+
+	// Is the object paused
+	bool isPaused;
 
 	std::string Path;
 

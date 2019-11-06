@@ -23,6 +23,8 @@
 #include "PlayerMove.h"
 #include "ExplosionTimer.h"
 #include "Lava.h"
+#include "MouseClick.h"
+#include "UIButton.h"
 
 //Resources
 #include <Mesh.h>
@@ -62,6 +64,8 @@ void Levels::Level1::Load()
 	GameObjectFactory::GetInstance().RegisterComponent<Behaviors::PlayerMove>();
 	GameObjectFactory::GetInstance().RegisterComponent<Behaviors::ExplosionTimer>();
 	GameObjectFactory::GetInstance().RegisterComponent<Behaviors::Lava>();
+	GameObjectFactory::GetInstance().RegisterComponent<Behaviors::MouseClick>();
+	GameObjectFactory::GetInstance().RegisterComponent<Behaviors::UIButton>();
 
 	SetFileLocation("Assets/Level1.lvl");
 }

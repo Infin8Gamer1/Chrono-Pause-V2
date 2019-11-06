@@ -72,7 +72,7 @@ void Levels::LevelEditorLevel::Initialize()
 {
 	std::cout << GetName() << "::Initialize" << std::endl;
 
-	LoadLevel();
+	LoadLevel(true);
 }
 
 void Levels::LevelEditorLevel::Update(float dt)
