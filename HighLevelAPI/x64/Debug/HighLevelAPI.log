@@ -1,31 +1,4 @@
-﻿  Animation.cpp
-  CameraController.cpp
-  Collider.cpp
-  ColliderCircle.cpp
-  ColliderLine.cpp
-  ColliderPoint.cpp
-  ColliderRectangle.cpp
-  ColliderTilemap.cpp
-  Component.cpp
-  GameObject.cpp
-C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\HighLevelAPI\src\GameObject.cpp(185,22): warning C4458: declaration of 'name' hides class member
-  GameObjectFactory.cpp
-  GameObjectManager.cpp
-C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\LowLevelAPI\include\BetaObject.h(129,14): message : see declaration of 'BetaObject::name'
-C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\HighLevelAPI\src\GameObjectManager.cpp(144,81): warning C4458: declaration of 'name' hides class member
-  Level.cpp
-C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\LowLevelAPI\include\BetaObject.h(129,14): message : see declaration of 'BetaObject::name'
-C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\HighLevelAPI\src\Level.cpp(71,19): warning C4458: declaration of 'name' hides class member
-  Physics.cpp
-  Space.cpp
-  SpaceManager.cpp
-  Sprite.cpp
-C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\LowLevelAPI\include\BetaObject.h(129,14): message : see declaration of 'BetaObject::name'
-C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\HighLevelAPI\src\Sprite.cpp(60,20): warning C4458: declaration of 'ssName' hides class member
-  SpriteText.cpp
-  Transform.cpp
-  Generating Code...
-C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\HighLevelAPI\include\Sprite.h(144,14): message : see declaration of 'Sprite::ssName'
+﻿  Space.cpp
 fmodstudioL64_vc.lib(fmodstudioL64.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR already defined in fmodL64_vc.lib(fmodL64.dll); second definition ignored
 AntTweakBar64.lib(AntTweakBar64.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR already defined in fmodL64_vc.lib(fmodL64.dll); second definition ignored
   HighLevelAPI.vcxproj -> C:\Users\jacob\Documents\_Dev\Chrono-Pause-V2\Chrono-Pause-V2\HighLevelAPI\\lib\BetaHigh_x64_D.lib
