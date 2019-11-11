@@ -50,15 +50,15 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 	UNREFERENCED_PARAMETER(instance);
 
 	// Create a new space called "Level"
-	Space* space = new Space("Level", true);
+	Space* space = new Space("Level", true, false, true);
 	space->SetLevel(new Levels::LevelEditorLevel());
 
 	//setup the UI Space
-	Space* uiSpace = new Space("UI");
+	Space* uiSpace = new Space("UI", false, false, true);
 	uiSpace->SetLevel(new Levels::LevelEditorUI());
 
 	// Create a new space called "Management"
-	Space* managmentSpace = new Space("Management", true, true);
+	Space* managmentSpace = new Space("Management", true, true, true);
 	managmentSpace->SetLevel(new Levels::LevelManagerLevel());
 
 	SpaceManager* spaceManager = new SpaceManager(true);

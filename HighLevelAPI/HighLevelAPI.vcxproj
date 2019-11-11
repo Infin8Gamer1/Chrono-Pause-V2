@@ -103,6 +103,7 @@
     <ClInclude Include="include\GameObjectManager.h" />
     <ClInclude Include="include\Intersection2D.h" />
     <ClInclude Include="include\Level.h" />
+    <ClInclude Include="include\LevelChanger.h" />
     <ClInclude Include="include\Matrix2DStudent.h" />
     <ClInclude Include="include\MeshHelper.h" />
     <ClInclude Include="include\Parser.h" />
@@ -125,6 +126,7 @@
     <ClCompile Include="src\CameraController.cpp" />
     <ClCompile Include="src\ColliderLine.cpp" />
     <ClCompile Include="src\FileOpenHelper.cpp" />
+    <ClCompile Include="src\LevelChanger.cpp" />
     <ClCompile Include="src\SpaceManager.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Collider.cpp" />

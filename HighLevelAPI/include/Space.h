@@ -39,7 +39,7 @@ public:
 	//------------------------------------------------------------------------------
 
 	// Constructor(s)
-	Space(const std::string& name, bool depth = false, bool useFirstSpaceCamera = false);
+	Space(const std::string& name, bool depth = false, bool useFirstSpaceCamera = false, bool isLevelEditor = false);
 
 	// Destructor
 	~Space();
@@ -89,6 +89,9 @@ public:
 	// Returns the camera for the space
 	Camera* GetCamera();
 
+	// Returns if space is initilized as Level Editor
+	bool GetIsLevelEditor();
+
 private:
 	//------------------------------------------------------------------------------
 	// Private Functions:
@@ -108,6 +111,7 @@ private:
 	Camera* camera;
 	bool depth;
 	bool useFirstSpaceCamera;
+	bool isLevelEditor;
 };
 
 //------------------------------------------------------------------------------

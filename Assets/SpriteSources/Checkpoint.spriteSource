@@ -1,0 +1,8 @@
+Checkpoint
+{
+	textureName : Checkpoint.png
+    textureRows : 5
+    textureColumns : 3
+	frameCount : 15
+	frameStart : 0
+}

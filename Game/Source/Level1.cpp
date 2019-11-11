@@ -87,7 +87,6 @@ void Levels::Level1::Update(float dt)
 {
 	UNREFERENCED_PARAMETER(dt);
 
-
 	// Update the camera controller
 	cameraController->Follow();
 }

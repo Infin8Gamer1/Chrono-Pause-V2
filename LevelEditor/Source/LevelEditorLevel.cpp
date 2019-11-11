@@ -42,9 +42,6 @@
 
 Levels::LevelEditorLevel::LevelEditorLevel() : Level("LevelEditor")
 {
-	// Sound manager
-	soundManager = nullptr;
-	musicChannel = nullptr;
 }
 
 void Levels::LevelEditorLevel::Load()
@@ -57,15 +54,7 @@ void Levels::LevelEditorLevel::Load()
 
 	////Register Custom Components
 
-	//Setup Sounds
-	soundManager = Engine::GetInstance().GetModule<SoundManager>();
-	soundManager->AddMusic("Asteroid_Field.mp3");
-	soundManager->AddEffect("teleport.wav");
-
-	soundManager->AddBank("Master Bank.strings.bank");
-	soundManager->AddBank("Master Bank.bank");
-
-	SetFileLocation("Assets/Level1.lvl");
+	SetFileLocation("Assets/Level2.lvl");
 }
 
 void Levels::LevelEditorLevel::Initialize()
@@ -85,14 +74,9 @@ void Levels::LevelEditorLevel::Shutdown()
 	std::cout << GetName() << "::Shutdown" << std::endl;
 
 	//Save();
-
-	musicChannel->stop();
-	musicChannel = nullptr;
 }
 
 void Levels::LevelEditorLevel::Unload()
 {
 	std::cout << GetName() << "::Unload" << std::endl;
-
-	soundManager->Shutdown();
 }

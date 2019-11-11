@@ -25,6 +25,7 @@
 #include <SpriteTilemap.h>
 #include <SpriteText.h>
 #include <ColliderLine.h>
+#include <LevelChanger.h>
 
 static GameObjectFactory* Instance;
 
@@ -43,6 +44,7 @@ GameObjectFactory::GameObjectFactory()
 	RegisterComponent<ColliderRectangle>();
 	RegisterComponent<ColliderTilemap>();
 	RegisterComponent<ColliderLine>();
+	RegisterComponent<LevelChanger>();
 }
 
 GameObjectFactory::~GameObjectFactory()

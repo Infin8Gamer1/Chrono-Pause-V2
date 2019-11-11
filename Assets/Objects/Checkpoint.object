@@ -1,0 +1,29 @@
+Checkpoint
+{
+  numComponents : 5
+  Transform
+  {
+    translation : { 0, 0 }
+    rotation : 0
+    scale : { 100, 100 }
+  }
+  Sprite
+  {
+    frameIndex : 0
+    color : { 1 , 1 , 1 , 1 }
+    spriteSourceName : Checkpoint
+  }
+  Animation
+  {
+  }
+  ColliderRectangle
+  {
+    CollisionGroup : default
+    CollisionFlags : all
+    extents : { 48, 50 }
+  }
+  LevelChanger
+  {
+    nextLevel : Assets/Level1.lvl
+  }
+}

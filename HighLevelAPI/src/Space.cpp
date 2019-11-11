@@ -20,7 +20,7 @@
 #include <Engine.h>
 #include <SpaceManager.h>
 
-Space::Space(const std::string & name, bool _depth, bool _useFirstSpaceCamera) : BetaObject(name), objectManager(this)
+Space::Space(const std::string & name, bool _depth, bool _useFirstSpaceCamera, bool _isLevelEditor) : BetaObject(name), objectManager(this)
 {
 	paused = false;
 	currentLevel = nullptr;
@@ -28,6 +28,7 @@ Space::Space(const std::string & name, bool _depth, bool _useFirstSpaceCamera) :
 	camera = new Camera();
 	depth = _depth;
 	useFirstSpaceCamera = _useFirstSpaceCamera;
+	isLevelEditor = _isLevelEditor;
 }
 
 Space::~Space()
@@ -114,6 +115,11 @@ GameObjectManager & Space::GetObjectManager()
 Camera * Space::GetCamera()
 {
 	return camera;
+}
+
+bool Space::GetIsLevelEditor()
+{
+	return isLevelEditor;
 }
 
 void Space::ChangeLevel()

@@ -21,7 +21,15 @@ CameraController::CameraController(Camera& camera_, Transform* followedTransform
 
 void CameraController::Reset()
 {
-	camera.SetTranslation(followedTransform->GetTranslation());
+	if (followedTransform)
+	{
+		camera.SetTranslation(followedTransform->GetTranslation());
+	}
+	else {
+		camera.SetTranslation(Vector2D(0, 0));
+	}
+
+	
 }
 
 void CameraController::Retarget(Transform* target)

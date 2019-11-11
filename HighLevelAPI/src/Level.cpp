@@ -18,6 +18,7 @@
 #include <sstream>
 #include "CameraController.h"
 #include <Graphics.h>
+#include <AntTweakBar.h>
 
 Level::Level(const std::string & name) : BetaObject(name)
 {
@@ -77,7 +78,9 @@ void Level::Deserialize(Parser & parser)
 
 		if (createTweakBarsOnLoad)
 		{
-			object->CreateTweakBar();
+			TwBar* bar = object->CreateTweakBar();
+
+			//TwSetParam(bar, NULL, "iconfined", TW_PARAM_CSTRING, 1, "true");
 		}
 
 		GetSpace()->GetObjectManager().AddObject(*object);

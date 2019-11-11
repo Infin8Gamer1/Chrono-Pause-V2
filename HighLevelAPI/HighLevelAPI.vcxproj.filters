@@ -136,6 +136,9 @@
     <ClInclude Include="include\CameraController.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\LevelChanger.h">
+      <Filter>Levels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\stdafx.cpp">
@@ -233,6 +236,9 @@
     </ClCompile>
     <ClCompile Include="src\CameraController.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LevelChanger.cpp">
+      <Filter>Levels</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

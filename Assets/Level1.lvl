@@ -1,6 +1,6 @@
 LevelEditor
 {
-  numGameObjects : 8
+  numGameObjects : 17
   {
     TileMap
     {
@@ -60,6 +60,24 @@ LevelEditor
       Behaviors::PlayerAnimController
       { } 
       Behaviors::PlayerMove
+      { } 
+    }
+	Clicker
+    {
+      numComponents : 3
+      Transform
+      {
+        translation : { 0, 0 }
+        rotation : 0
+        scale : { 10, 10 }
+      }
+      ColliderCircle
+      {
+        CollisionGroup : default
+        CollisionFlags : all
+        radius : 10
+      }
+      Behaviors::MouseClick
       { } 
     }
     Lava
@@ -197,23 +215,250 @@ LevelEditor
       Behaviors::Lava
       { } 
     }
-    Clicker
+    Lava_6
     {
-      numComponents : 3
+      numComponents : 5
       Transform
       {
-        translation : { 0, 0 }
+        translation : { 600.5, -599.5 }
         rotation : 0
-        scale : { 10, 10 }
+        scale : { 100, 100 }
       }
-      ColliderCircle
+      Sprite
+      {
+        frameIndex : 0
+        color : { 1 , 1 , 1 , 1 }
+        spriteSourceName : Lava
+      }
+      Animation
+      {
+      }
+      ColliderRectangle
       {
         CollisionGroup : default
         CollisionFlags : all
-        radius : 10
+        extents : { 48, 50 }
       }
-      Behaviors::MouseClick
+      Behaviors::Lava
       { } 
+    }
+    Lava_7
+    {
+      numComponents : 5
+      Transform
+      {
+        translation : { 700.5, -599.5 }
+        rotation : 0
+        scale : { 100, 100 }
+      }
+      Sprite
+      {
+        frameIndex : 0
+        color : { 1 , 1 , 1 , 1 }
+        spriteSourceName : Lava
+      }
+      Animation
+      {
+      }
+      ColliderRectangle
+      {
+        CollisionGroup : default
+        CollisionFlags : all
+        extents : { 48, 50 }
+      }
+      Behaviors::Lava
+      { } 
+    }
+    Lava_8
+    {
+      numComponents : 5
+      Transform
+      {
+        translation : { 800.5, -599.5 }
+        rotation : 0
+        scale : { 100, 100 }
+      }
+      Sprite
+      {
+        frameIndex : 0
+        color : { 1 , 1 , 1 , 1 }
+        spriteSourceName : Lava
+      }
+      Animation
+      {
+      }
+      ColliderRectangle
+      {
+        CollisionGroup : default
+        CollisionFlags : all
+        extents : { 48, 50 }
+      }
+      Behaviors::Lava
+      { } 
+    }
+    Lava_9
+    {
+      numComponents : 5
+      Transform
+      {
+        translation : { 900.5, -599.5 }
+        rotation : 0
+        scale : { 100, 100 }
+      }
+      Sprite
+      {
+        frameIndex : 0
+        color : { 1 , 1 , 1 , 1 }
+        spriteSourceName : Lava
+      }
+      Animation
+      {
+      }
+      ColliderRectangle
+      {
+        CollisionGroup : default
+        CollisionFlags : all
+        extents : { 48, 50 }
+      }
+      Behaviors::Lava
+      { } 
+    }
+    Lava_10
+    {
+      numComponents : 5
+      Transform
+      {
+        translation : { 1000.5, -599.5 }
+        rotation : 0
+        scale : { 100, 100 }
+      }
+      Sprite
+      {
+        frameIndex : 0
+        color : { 1 , 1 , 1 , 1 }
+        spriteSourceName : Lava
+      }
+      Animation
+      {
+      }
+      ColliderRectangle
+      {
+        CollisionGroup : default
+        CollisionFlags : all
+        extents : { 48, 50 }
+      }
+      Behaviors::Lava
+      { } 
+    }
+    Lava_11
+    {
+      numComponents : 5
+      Transform
+      {
+        translation : { 1100.5, -599.5 }
+        rotation : 0
+        scale : { 100, 100 }
+      }
+      Sprite
+      {
+        frameIndex : 0
+        color : { 1 , 1 , 1 , 1 }
+        spriteSourceName : Lava
+      }
+      Animation
+      {
+      }
+      ColliderRectangle
+      {
+        CollisionGroup : default
+        CollisionFlags : all
+        extents : { 48, 50 }
+      }
+      Behaviors::Lava
+      { } 
+    }
+    Lava_12
+    {
+      numComponents : 5
+      Transform
+      {
+        translation : { 1200.5, -599.5 }
+        rotation : 0
+        scale : { 100, 100 }
+      }
+      Sprite
+      {
+        frameIndex : 0
+        color : { 1 , 1 , 1 , 1 }
+        spriteSourceName : Lava
+      }
+      Animation
+      {
+      }
+      ColliderRectangle
+      {
+        CollisionGroup : default
+        CollisionFlags : all
+        extents : { 48, 50 }
+      }
+      Behaviors::Lava
+      { } 
+    }
+    Lava_13
+    {
+      numComponents : 5
+      Transform
+      {
+        translation : { 1300.5, -599.5 }
+        rotation : 0
+        scale : { 100, 100 }
+      }
+      Sprite
+      {
+        frameIndex : 0
+        color : { 1 , 1 , 1 , 1 }
+        spriteSourceName : Lava
+      }
+      Animation
+      {
+      }
+      ColliderRectangle
+      {
+        CollisionGroup : default
+        CollisionFlags : all
+        extents : { 48, 50 }
+      }
+      Behaviors::Lava
+      { } 
+    }
+    Checkpoint
+    {
+      numComponents : 5
+      Transform
+      {
+        translation : { 1292.5, -214.5 }
+        rotation : 0
+        scale : { 100, 100 }
+      }
+      Sprite
+      {
+        frameIndex : 0
+        color : { 1 , 1 , 1 , 1 }
+        spriteSourceName : Checkpoint
+      }
+      Animation
+      {
+      }
+      ColliderRectangle
+      {
+        CollisionGroup : default
+        CollisionFlags : all
+        extents : { 48, 50 }
+      }
+      LevelChanger
+      {
+        nextLevel : Assets/Level2.lvl
+      }
     }
   }
 }

@@ -184,7 +184,7 @@ TwBar* GameObject::CreateTweakBar(TwBar* bar_)
 	if (bar == nullptr) {
 		std::string name = GetName() + " Properties";
 		bar = TwNewBar(name.c_str());
-		TwDefine(std::string(" '" + name + "' size = '200 300' position = '25 135' alpha = 128 refresh = 0.15 movable = true resizable = true contained = false color = '28 183 255'").c_str());
+		TwDefine(std::string(" '" + name + "' size = '200 300' position = '25 135' alpha = 128 refresh = 0.15 movable = true resizable = true contained = false color = '28 183 255' iconified = true").c_str());
 	}
 	
 	for (size_t i = 0; i < components.size(); i++)

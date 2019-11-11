@@ -1,0 +1,113 @@
+LevelEditor
+{
+  numGameObjects : 4
+  {
+    TileMap
+    {
+      numComponents : 3
+      Transform
+      {
+        translation : { -400, 200 }
+        rotation : 0
+        scale : { 100, 100 }
+      }
+      SpriteTilemap
+      {
+        frameIndex : 15
+        color : { 1 , 1 , 1 , 1 }
+        spriteSourceName : TileMapConcrete
+        tilemapLoc : Level2
+      }
+      ColliderTilemap
+      {
+        CollisionGroup : default
+        CollisionFlags : all
+        tilemapLoc : Level2
+      }
+    }
+    Player
+    {
+      numComponents : 7
+      Transform
+      {
+        translation : { 0.5, -200 }
+        rotation : 0
+        scale : { 100, 100 }
+      }
+      Sprite
+      {
+        frameIndex : 0
+        color : { 1 , 1 , 1 , 1 }
+        spriteSourceName : Player
+      }
+      Physics
+      {
+        acceleration : { 0, -275 }
+        velocity : { 0, 0 }
+        angularVelocity : 0
+        mass : 1
+        gravity : { 0, -275 }
+      }
+      Animation
+      {
+      }
+      ColliderRectangle
+      {
+        CollisionGroup : default
+        CollisionFlags : all
+        extents : { 48, 50 }
+      }
+      Behaviors::PlayerAnimController
+      { } 
+      Behaviors::PlayerMove
+      { } 
+    }
+	Clicker
+    {
+      numComponents : 3
+      Transform
+      {
+        translation : { 0, 0 }
+        rotation : 0
+        scale : { 10, 10 }
+      }
+      ColliderCircle
+      {
+        CollisionGroup : default
+        CollisionFlags : all
+        radius : 10
+      }
+      Behaviors::MouseClick
+      { } 
+    }
+    Checkpoint
+    {
+      numComponents : 5
+      Transform
+      {
+        translation : { 1500.5, 85.5 }
+        rotation : 0
+        scale : { 100, 100 }
+      }
+      Sprite
+      {
+        frameIndex : 0
+        color : { 1 , 1 , 1 , 1 }
+        spriteSourceName : Checkpoint
+      }
+      Animation
+      {
+      }
+      ColliderRectangle
+      {
+        CollisionGroup : default
+        CollisionFlags : all
+        extents : { 48, 50 }
+      }
+      LevelChanger
+      {
+        nextLevel : Assets/Level1.lvl
+      }
+    }
+  }
+}
